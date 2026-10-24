@@ -294,7 +294,7 @@ export default function ManualEntry() {
 							disabled={saving}
 							className="px-6 py-2.5 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors text-sm"
 						>
-							{saving ? "Saving..." : "Save Manual Expense"}
+							{saving ? "Saving..." : "Save"}
 						</button>
 					</div>
 				</div>

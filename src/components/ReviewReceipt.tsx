@@ -347,7 +347,7 @@ export default function ReviewReceipt({
                             type="button"
                             onClick={() => setShowDiscardPopup(true)}
                             disabled={saving}
-                            className="px-5 py-2.5 border border-slate-300 text-slate-700 rounded-lg hover:bg-slate-50 disabled:opacity-50 transition-colors font-medium text-sm"
+                            className="px-5 py-2.5 border border-slate-300 bg-red-600 text-white rounded-lg hover:bg-red-700 disabled:opacity-50 transition-colors font-medium text-sm"
                         >
                             Discard
                         </button>
@@ -356,9 +356,9 @@ export default function ReviewReceipt({
                             type="button"
                             onClick={handleSave}
                             disabled={saving}
-                            className="px-5 py-2.5 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors text-sm"
+                            className="px-7 py-2.5 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors text-sm"
                         >
-                            {saving ? "Saving..." : "Save Expense"}
+                            {saving ? "Saving..." : "Save"}
                         </button>
                     </div>
                 </div>
