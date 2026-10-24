@@ -23,6 +23,7 @@ export default function ReviewReceipt({
     const [saving, setSaving] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const [showDiscardPopup, setShowDiscardPopup] = useState(false);
+    const [showSavePopup, setShowSavePopup] = useState(false);
 
     // Initialize draft state with the data extracted by Gemini
     const [draft, setDraft] = useState<Receipt>(() => ({
@@ -86,7 +87,12 @@ export default function ReviewReceipt({
         }));
     };
 
-    const handleSave = async () => {
+    const handleSave = () => {
+        setShowSavePopup(true);
+    };
+
+    const confirmSave = async () => {
+        setShowSavePopup(false);
         try {
             setSaving(true);
             setError(null);
@@ -134,6 +140,16 @@ export default function ReviewReceipt({
                 }}
                 onCancel={() => setShowDiscardPopup(false)}
                 okLabel="Discard"
+            />
+
+            <Popup
+                open={showSavePopup}
+                type="cancel"
+                title="Save Expense?"
+                message="Are you sure you want to save this expense?"
+                onOk={confirmSave}
+                onCancel={() => setShowSavePopup(false)}
+                okLabel="Save"
             />
 
             <Popup

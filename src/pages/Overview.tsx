@@ -63,10 +63,10 @@ export default function ExpenseOverview() {
 return (
 		<div className="max-w-7xl mx-auto space-y-6 border-slate-200 rounded-xl p-6 bg-gray-100 shadow-sm">
 			<div>
-				<h1 className="text-2xl font-bold text-slate-900">Expense Overview</h1>
-				<p className="text-sm text-slate-500 mt-1">
-					You have {expenses.length} saved receipt(s).
-				</p>
+				<h1 className="text-2xl font-bold text-slate-700">
+					<FontAwesomeIcon icon={faReceipt} className="mr-2" />
+					Overview
+				</h1>
 			</div>
 
 			{expenses.length === 0 ? (

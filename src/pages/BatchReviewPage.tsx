@@ -56,7 +56,7 @@ export default function BatchReviewPage({
             </div>
 
             {/* Responsive grid: 1 column on phone, 2 columns on large screens */}
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-start">
+            <div className="grid grid-cols-1 gap-6 items-start">
                 {results.map((result, index) => (
                     <ReviewReceipt
                         key={index}

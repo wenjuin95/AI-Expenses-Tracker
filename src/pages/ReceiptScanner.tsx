@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTrash, faKey, faCheck } from "@fortawesome/free-solid-svg-icons";
+import { faTrash, faKey } from "@fortawesome/free-solid-svg-icons";
 import type { Receipt } from "../types/expenses";
-import { getErrorMessage, getErrorStatus } from "../types/errors";
+import { getErrorMessage } from "../types/errors";
 
 import { parseReceipts } from "../api/expenseApi";
 import PreventRefresh from "../components/PreventRefresh";
@@ -12,6 +12,7 @@ import BatchReviewPage from "./BatchReviewPage";
 export default function ReceiptScanner() {
 	const [apiKey, setApiKey] = useState("");
 	const [isApiKeySaved, setIsApiKeySaved] = useState(false);
+	const [showApiKeySavedPopup, setShowApiKeySavedPopup] = useState(false);
 
 	const [selectedFile, setSelectedFile] = useState<File[]>([]);
 	const [loading, setLoading] = useState(false);
@@ -30,6 +31,7 @@ export default function ReceiptScanner() {
 		if (!apiKey.trim()) return;
 		localStorage.setItem("api_key", apiKey.trim());
 		setIsApiKeySaved(true);
+		setShowApiKeySavedPopup(true);
 	}
 
 	const handleRemoveApiKey = () => {
@@ -68,9 +70,12 @@ export default function ReceiptScanner() {
 		} catch (err) {
 			const ErrorMessage = getErrorMessage(err);
 			if (ErrorMessage.toLocaleLowerCase().includes("api key")) {
+				console.error("Invalid API key provided. Please check your API key and try again.");
 				setError("Invalid API key. Please check your API key and try again.");
+			} else {
+				console.error("An unexpected error occurred while processing the receipt. Please try again.");
+				setError("An unexpected error occurred while processing the receipt. Please try again.");
 			}
-			setError("An unexpected error occurred while processing the receipt. Please try again.");
 		} finally {
 			setLoading(false);
 		}
@@ -138,13 +143,23 @@ export default function ReceiptScanner() {
 
 	return (
 		<div className="max-w-4xl mx-auto space-y-6 border-slate-200 rounded-xl p-6 bg-gray-100 shadow-sm">
+
 			<PreventRefresh enabled={Boolean(selectedFile?.length || result?.length)} />
+
 			<Popup
 				open={Boolean(error)}
 				type="error"
 				title="Upload Error"
 				message={error ?? ""}
 				onOk={() => setError(null)}
+			/>
+
+			<Popup
+				open={showApiKeySavedPopup}
+				type="success"
+				title="API Key Saved"
+				message="Your API key has been saved successfully."
+				onOk={() => setShowApiKeySavedPopup(false)}
 			/>
 
 			<div className="flex items-center justify-between">
