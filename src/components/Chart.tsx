@@ -93,7 +93,10 @@ export default function ExpenseChart({ expenses }: ExpenseChartProps) {
                     {chartData.labels?.map((label, index) => {
                         const amount = chartData.datasets[0].data[index];
                         const percentage = ((amount / totalSpent) * 100).toFixed(1);
-                        const color = chartData.datasets[0].backgroundColor?.[index as number] as string;
+                        const backgroundColor = chartData.datasets[0].backgroundColor;
+                        const color = Array.isArray(backgroundColor)
+                            ? backgroundColor[index] as string
+                            : undefined;
 
                         return (
                             <div key={label as string} className="flex items-center justify-between text-sm">
