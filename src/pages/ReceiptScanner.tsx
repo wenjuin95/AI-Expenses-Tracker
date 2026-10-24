@@ -170,14 +170,23 @@ export default function ReceiptScanner() {
 					</p>
 				</div>
 
-				{/* Button to remove API Key */}
-				<button
-					onClick={handleRemoveApiKey}
-					className="text-xs text-red-500 hover:text-red-700 bg-red-50 hover:bg-red-100 px-3 py-1.5 rounded-md flex items-center gap-2 transition-colors border border-red-200"
-					title="Delete saved API key"
-				>
-					<FontAwesomeIcon icon={faTrash} className="w-3 h-3" /> Remove API Key
-				</button>
+				<div>
+					<div className="flex items-center">
+						<p className="text-xs text-slate-700 px-1 py-1.5 my-4 ">
+							API Key :
+						</p>
+						<span className="font-mono text-sm text-slate-400 px-3 py-1 my-4 rounded-md transition-colors border border-gray-100 bg-gray-50">{`${apiKey.slice(0, 4)}...`}</span>
+					</div>
+					{/* Button to remove API Key */}
+					<button
+						onClick={handleRemoveApiKey}
+						className="text-xs text-red-500 hover:text-red-700 bg-red-50 hover:bg-red-100 px-3 py-1.5 rounded-md flex items-center gap-2 transition-colors border border-red-200"
+						title="Delete saved API key"
+					>
+						<FontAwesomeIcon icon={faTrash} className="w-3 h-3" /> Remove API Key
+					</button>
+				</div>
+
 			</div>
 
 			<div className="bg-white border border-slate-200 rounded-xl p-6 shadow-sm space-y-4">

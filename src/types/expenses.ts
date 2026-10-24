@@ -36,7 +36,7 @@ export const receiptSchema = {
   properties: {
     merchant_name: { type: Type.STRING, description: "Name of the store or merchant" },
     date: { type: Type.STRING, description: "Date of the transaction in YYYY-MM-DD format" },
-    currency: { type: Type.STRING, description: "Currency code (e.g., USD, MYR)" },
+    currency: { type: Type.STRING, description: "Currency code (e.g., USD, RM)" },
     subtotal: { type: Type.NUMBER, description: "Subtotal amount before tax and discounts" },
     discount: { type: Type.NUMBER, description: "Total discount applied" },
     tax: { type: Type.NUMBER, description: "Total tax amount" },

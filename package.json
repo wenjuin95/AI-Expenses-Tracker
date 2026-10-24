@@ -15,8 +15,10 @@
     "@fortawesome/react-fontawesome": "^3.5.0",
     "@google/genai": "^2.31.0",
     "@tailwindcss/vite": "^4.3.3",
+    "chart.js": "^4.6.1",
     "idb-keyval": "^6.3.0",
     "react": "^19.3.1",
+    "react-chartjs-2": "^5.3.1",
     "react-dom": "^19.3.1",
     "react-router-dom": "^7.18.4",
     "tailwindcss": "^4.3.3"

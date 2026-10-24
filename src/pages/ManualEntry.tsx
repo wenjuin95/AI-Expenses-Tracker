@@ -12,7 +12,7 @@ export default function ManualEntry() {
 	const [draft, setDraft] = useState<Receipt>({
 		merchant_name: "",
 		date: new Date().toISOString().split('T')[0], // Defaults to today
-		currency: "MYR",
+		currency: "RM",
 		subtotal: 0,
 		discount: 0,
 		tax: 0,
@@ -38,7 +38,7 @@ export default function ManualEntry() {
 	const addItem = () => {
 		setDraft((current) => ({
 			...current,
-			items: [...current.items, { name: "", quantity: 1, price: 0 }],
+			items: [...current.items, { name: "", quantity: 0, price: 0 }],
 		}));
 	};
 
@@ -55,6 +55,19 @@ export default function ManualEntry() {
 		if (draft.total_amount <= 0) {
 			setError("Merchant name and a Total Amount greater than 0 are required.");
 			return;
+		}
+
+		if (draft.items.length > 0) {
+			if (draft.items.some(item => !item.name)) {
+				setError("Items must have a name. Please fill in all item names or remove empty items.");
+				return;
+			} else if (draft.items.some(item => item.quantity <= 0)) {
+				setError("Item quantities can't be zero or negative. Please correct the quantities.");
+				return;
+			} else if (draft.items.some(item => item.price <= 0)) {
+				setError("Item prices can't be zero or negative. Please correct the prices.");
+				return;
+			}
 		}
 
 		setShowSavePopup(true);
@@ -230,6 +243,7 @@ export default function ManualEntry() {
 												<label className="block text-xs font-medium text-slate-500 mb-1">Item Name</label>
 												<input
 													type="text"
+													required
 													value={item.name ?? ""}
 													onChange={(e) => updateItem(idx, "name", e.target.value)}
 													className="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm"
@@ -239,8 +253,9 @@ export default function ManualEntry() {
 												<label className="block text-xs font-medium text-slate-500 mb-1">Qty</label>
 												<input
 													type="number"
-													step="0.01"
-													value={item.quantity ?? ""}
+													required
+													step="0"
+													value={item.quantity || ""}
 													onChange={(e) => updateItem(idx, "quantity", e.target.value === "" ? 0 : Number(e.target.value))}
 													className="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm"
 												/>
@@ -249,8 +264,9 @@ export default function ManualEntry() {
 												<label className="block text-xs font-medium text-slate-500 mb-1">Price</label>
 												<input
 													type="number"
+													required
 													step="0.01"
-													value={item.price ?? ""}
+													value={item.price || ""}
 													onChange={(e) => updateItem(idx, "price", e.target.value === "" ? 0 : Number(e.target.value))}
 													className="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm"
 												/>

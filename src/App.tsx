@@ -12,7 +12,7 @@ function App() {
 
 return (
 		<div className="max-w-4xl mx-auto space-y-8 p-4 md:p-6">
-			<h1 className="text-2xl font-bold text-slate-900">Expense Tracker</h1>
+			<h1 className="flex justify-center text-4xl font-bold text-slate-900">Expense Tracker</h1>
 
 			{/* Header & Back Button Area */}
 			<div className="flex items-center">
