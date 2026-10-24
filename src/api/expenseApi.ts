@@ -3,10 +3,9 @@ import { get, set } from 'idb-keyval';
 import { receiptSchema, type Receipt } from '../types/expenses';
 import { getErrorMessage, getErrorStatus } from '../types/errors';
 
-const API_KEY = import.meta.env.VITE_GEMINI_API_KEY || 'YOUR_API_KEY';
+// const API_KEY = import.meta.env.VITE_GEMINI_API_KEY || 'YOUR_API_KEY';
+const API_KEY = localStorage.getItem("api_key") || 'YOUR_API_KEY';
 const STORAGE_KEY = "expenses_data";
-
-const ai = new GoogleGenAI({ apiKey: API_KEY });
 
 const fileToBase64 = (file: File): Promise<string> => {
   return new Promise((resolve, reject) => {
@@ -28,6 +27,12 @@ const fileToBase64 = (file: File): Promise<string> => {
 
 export async function parseReceipt(file: File): Promise<Receipt | null> {
 	try {
+		if (!API_KEY) {
+			throw new Error("API key is not set. Please provide a valid API key.");
+		}
+
+		const ai = new GoogleGenAI({ apiKey: API_KEY });
+
 		const base64Data = await fileToBase64(file);
 
 		const filePart = {
@@ -59,11 +64,12 @@ export async function parseReceipt(file: File): Promise<Receipt | null> {
 	} catch (error) {
 		const status = getErrorStatus(error);
 		const message = getErrorMessage(error);
-
 		if (status === 429 || message.includes('429')) {
 			console.error("Rate limit exceeded (429 Too Many Requests). Please try again later.");
+			throw new Error("Rate limit exceeded. Please try again later.");
 		} else {
-			console.error("Failed to parse receipt:", error);
+			console.error("Failed to parse receipt:", message);
+			throw new Error(message || "Failed to parse receipt.");
 		}
 
 		return null;
