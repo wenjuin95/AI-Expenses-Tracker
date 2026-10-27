@@ -3,17 +3,17 @@
 ## About
 AI-Expense-Tracker is a purely client-side web application that leverages the Google Gemini API to parse natural language and receipts into structured financial data. It runs entirely in the browser without a backend or external database.
 
---
+---
 
 ## Problem
 Traditional expense trackers demand tedious, manual data entry, which leads to fatigue and inconsistent tracking. While modern AI-powered alternatives exist, they typically require paid subscriptions and force users to upload sensitive personal financial data to third-party cloud servers, creating privacy risks and data lock-in.
 
---
+---
 
 ## Solution
 This project shifts the AI processing directly to the client. By utilizing a Bring-Your-Own-Key (BYOK) architecture with the Gemini API, users can automate expense logging through natural language or receipt scanning while keeping 100% of their data stored locally on their device via IndexedDB. There are no backend servers, no subscriptions, and zero privacy compromises.
 
---
+---
 
 ## Features
 * **AI Receipt Parsing:** Upload a photo of a receipt and automatically extract the merchant, date, and total amount.
@@ -22,7 +22,7 @@ This project shifts the AI processing directly to the client. By utilizing a Bri
 * **Local Privacy:** All financial records are stored securely in the browser's IndexedDB.
 * **Data Portability:** Export your entire transaction history to a JSON file for backup, and restore it at any time.
 
---
+---
 
 ## Workflow
 ```
@@ -51,14 +51,14 @@ This project shifts the AI processing directly to the client. By utilizing a Bri
       (Local Device)
 ```
 
---
+---
 
 ## Tech Stack
 * **Frontend:** React, TypeScript, Vite, TailwindCSS
 * **AI Integration:** `@google/genai` (targeting Gemini 3.5 Flash Lite)
 * **Storage:** IndexedDB (via Dexie.js / native API)
 
---
+---
 
 ## Getting Started
 
@@ -85,12 +85,12 @@ npm run dev
 
 4. Open http://localhost:5173 in your browser and enter your Gemini API key in the UI settings.
 
---
+---
 
 ## Future Improvements
 - Convert the application into a Progressive Web App (PWA) for native mobile installation and offline caching.
 
---
+---
 
 ## License
 Distributed under the MIT License. See LICENSE for more information.
