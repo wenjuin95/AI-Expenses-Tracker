@@ -6,12 +6,14 @@ AI-Expense-Tracker is a purely client-side web application that leverages the Go
 ---
 
 ## Problem
-Traditional expense trackers demand tedious, manual data entry, which leads to fatigue and inconsistent tracking. While modern AI-powered alternatives exist, they typically require paid subscriptions and force users to upload sensitive personal financial data to third-party cloud servers, creating privacy risks and data lock-in.
+- Traditional expense trackers demand tedious, manual data entry, which leads to fatigue and inconsistent tracking.
+- Modern AI-powered alternatives exist, they typically require paid subscriptions and force users to upload sensitive personal financial data to third-party cloud servers, creating privacy risks and data lock-in.
 
 ---
 
 ## Solution
-This project shifts the AI processing directly to the client. By utilizing a Bring-Your-Own-Key (BYOK) architecture with the Gemini API, users can automate expense logging through natural language or receipt scanning while keeping 100% of their data stored locally on their device via IndexedDB. There are no backend servers, no subscriptions, and zero privacy compromises.
+- The AI processing directly to the client by utilizing a Bring-Your-Own-Key (BYOK) architecture with the Gemini API.
+- Users can automate expense logging through natural language or receipt scanning while keeping 100% of their data stored locally on their device via IndexedDB. There are no backend servers, no subscriptions, and zero privacy compromises.
 
 ---
 
@@ -63,8 +65,8 @@ This project shifts the AI processing directly to the client. By utilizing a Bri
 ## Getting Started
 
 ### Prerequisites
-* Node.js installed
-* A Google Gemini API Key
+* Node.js
+* Gemini API Key
 
 ### Installation
 1. Clone the repository:
