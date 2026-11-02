@@ -261,6 +261,17 @@ export default function ReviewReceipt({
                                 />
                             </div>
 
+                            <div>
+                                <label className="block text-xs font-medium text-slate-500 mb-1">Discount</label>
+                                <input
+                                    type="number"
+                                    step="0.01"
+                                    value={draft.discount || ""}
+                                    onChange={(e) => updateField("discount", e.target.value === "" ? 0 : Number(e.target.value))}
+                                    className="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm"
+                                />
+                            </div>
+
                             <div className="col-span-2">
                                 <label className="block text-xs font-bold text-slate-700 mb-1">Total Amount</label>
                                 <input

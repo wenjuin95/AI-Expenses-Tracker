@@ -8,12 +8,14 @@ interface BatchReviewPageProps {
     results: Receipt[];
     setResults: React.Dispatch<React.SetStateAction<Receipt[] | null>>;
     setFiles: React.Dispatch<React.SetStateAction<File[]>>;
+    onReviewComplete: () => void;
 }
 
 export default function BatchReviewPage({
     results,
     setResults,
     setFiles,
+    onReviewComplete,
 }: BatchReviewPageProps) {
     // const navigate = useNavigate();
     const [processedCount, setProcessedCount] = useState(0);
@@ -28,7 +30,7 @@ export default function BatchReviewPage({
                 setTimeout(() => {
                     setResults(null);
                     setFiles([]);
-                    window.location.reload();
+                    onReviewComplete();
                 }, 1000);
             }
 

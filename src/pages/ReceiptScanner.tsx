@@ -9,7 +9,11 @@ import PreventRefresh from "../components/PreventRefresh";
 import Popup from "../components/Popup";
 import BatchReviewPage from "./BatchReviewPage";
 
-export default function ReceiptScanner() {
+interface ReceiptScannerProps {
+	onReviewComplete: () => void;
+}
+
+export default function ReceiptScanner({ onReviewComplete }: ReceiptScannerProps) {
 	const [apiKey, setApiKey] = useState("");
 	const [isApiKeySaved, setIsApiKeySaved] = useState(false);
 	const [showApiKeySavedPopup, setShowApiKeySavedPopup] = useState(false);
@@ -87,6 +91,7 @@ export default function ReceiptScanner() {
 				results={result}
 				setResults={setResult}
 				setFiles={setSelectedFile}
+				onReviewComplete={onReviewComplete}
 			/>
 		)
 	}

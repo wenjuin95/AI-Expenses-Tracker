@@ -69,7 +69,7 @@ return (
 				{/* 2. The AI Scanner Component */}
 				{activeView === 'scan' && (
 					<div className="animate-in fade-in slide-in-from-bottom-4 duration-300">
-						<ReceiptScanner />
+						<ReceiptScanner onReviewComplete={() => setActiveView('menu')} />
 					</div>
 				)}
 

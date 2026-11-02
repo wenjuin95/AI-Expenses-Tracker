@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { saveExpense } from "../api/expenseApi";
 import type { Receipt, ReceiptItem } from "../types/expenses";
 import Popup from "../components/Popup";
@@ -20,8 +20,16 @@ export default function ManualEntry() {
 		amount_paid: 0,
 		payment_method: "",
 		category: "Food", // Default category
-		items: [],
+		items: [{ name: "", quantity: 0, price: 0 }],
 	});
+
+	const calculatedSubtotal = draft.items.reduce((sum, item) => sum + item.quantity * item.price, 0);
+	const calculatedTotal = calculatedSubtotal + (draft.tax || 0) - (draft.discount || 0);
+
+	useEffect(() => {
+		console.log("Manual entry items:", draft.items);
+		console.log("Manual entry calculated total:", calculatedTotal);
+	}, [draft.items, calculatedTotal]);
 
 	const updateField = (field: keyof Receipt, value: string | number | undefined) => {
 		setDraft((current) => ({ ...current, [field]: value }));
@@ -52,8 +60,8 @@ export default function ManualEntry() {
 	const handleSave = (e: React.FormEvent) => {
 		e.preventDefault(); // Prevent standard form submission
 
-		if (draft.total_amount <= 0) {
-			setError("Merchant name and a Total Amount greater than 0 are required.");
+		if (calculatedTotal <= 0) {
+			setError("Total Amount greater than 0 are required.");
 			return;
 		}
 
@@ -77,6 +85,8 @@ export default function ManualEntry() {
 		setShowSavePopup(false);
 		const expenseToSave = {
 			...draft,
+			subtotal: calculatedSubtotal,
+			total_amount: calculatedTotal,
 			merchant_name: draft.merchant_name.trim() || "Merchant",
 		};
 
@@ -203,14 +213,24 @@ export default function ManualEntry() {
 								/>
 							</div>
 
+							<div>
+								<label className="block text-xs font-medium text-slate-500 mb-1">Discount</label>
+								<input
+									type="number"
+									step="0.01"
+									value={draft.discount || ""}
+									onChange={(e) => updateField("discount", e.target.value === "" ? 0 : Number(e.target.value))}
+									className="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm"
+								/>
+							</div>
+
 							<div className="col-span-2">
 								<label className="block text-xs font-bold text-slate-700 mb-1">Total Amount *</label>
 								<input
 									type="number"
 									step="0.01"
-									required
-									value={draft.total_amount || ""}
-									onChange={(e) => updateField("total_amount", e.target.value === "" ? 0 : Number(e.target.value))}
+									value={calculatedTotal || ""}
+									readOnly
 									className="w-full border border-blue-400 bg-blue-50 rounded-lg px-3 py-2 text-sm font-bold text-blue-900"
 								/>
 							</div>
