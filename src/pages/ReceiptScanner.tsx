@@ -147,7 +147,7 @@ export default function ReceiptScanner({ onReviewComplete }: ReceiptScannerProps
 	}
 
 return (
-        <div className="max-w-4xl mx-auto space-y-6 border-slate-200 rounded-xl p-4 sm:p-6 bg-gray-100 shadow-sm">
+        <div className="max-w-4xl mx-auto space-y-6 rounded-xl p-4 sm:p-6 bg-white border border-slate-200">
             <PreventRefresh enabled={Boolean(selectedFile?.length || result?.length)} />
 
             <Popup
@@ -179,7 +179,7 @@ return (
                 <div className="flex flex-col sm:items-end gap-3 bg-white sm:bg-transparent p-3 sm:p-0 rounded-lg border sm:border-none border-slate-200">
                     <div className="flex items-center gap-2">
                         <p className="text-xs text-slate-700">API Key:</p>
-                        <span className="font-mono text-xs text-slate-500 px-2 py-1 rounded-md border border-gray-200 bg-gray-50">
+                        <span className="font-mono text-xs text-slate-500 px-2 py-1 rounded-md border border-gray-200 bg-slate-50">
                             {`${apiKey.slice(0, 4)}...`}
                         </span>
                     </div>

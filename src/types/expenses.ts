@@ -18,15 +18,15 @@ export const EXPENSE_CATEGORIES: ExpenseCategory[] = [
 ];
 
 export const EXPENSE_CATEGORY_COLORS: Record<ExpenseCategory, string> = {
-  Food: "#f59e0b",
-  Transport: "#4287f5",
-  Shopping: "#50cc49",
-  Entertainment: "#8b5cf6",
-  Health: "#ec4899",
-  Other: "#64748b",
+  Food: "var(--app-category-food)",
+  Transport: "var(--app-category-transport)",
+  Shopping: "var(--app-category-shopping)",
+  Entertainment: "var(--app-category-entertainment)",
+  Health: "var(--app-category-health)",
+  Other: "var(--app-category-other)",
 };
 
-export const UNCATEGORIZED_COLOR = "#94a3b8";
+export const UNCATEGORIZED_COLOR = "var(--app-category-uncategorized)";
 
 export interface ReceiptItem {
   name: string;
@@ -64,7 +64,7 @@ export const receiptSchema = {
     payment_method: { type: Type.STRING, description: "Method of payment (e.g., Cash, Credit Card, E-Wallet)" },
     category: {
       type: Type.STRING,
-      enum: ["Food", "Transport", "Shopping", "Entertainment", "Health", "Other"]
+      enum: ["Food", "Transport", "Utilities", "Shopping", "Entertainment", "Health", "Other"]
     },
     items: {
       type: Type.ARRAY,

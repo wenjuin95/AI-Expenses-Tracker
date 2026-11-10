@@ -8,7 +8,11 @@ import ExpenseChart from "../components/Chart";
 import { exportCsv } from "../components/ExportFile";
 import Popup from "../components/Popup";
 
-export default function ExpenseOverview() {
+interface ExpenseOverviewProps {
+	theme: "light" | "dark";
+}
+
+export default function ExpenseOverview({ theme }: ExpenseOverviewProps) {
 	const [expenses, setExpenses] = useState<Receipt[]>([]);
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState<string | null>(null);
@@ -77,7 +81,7 @@ export default function ExpenseOverview() {
 	}
 
 return (
-		<div className="max-w-7xl mx-auto space-y-6 border-slate-200 rounded-xl p-6 bg-gray-100 shadow-sm">
+		<div className="max-w-7xl mx-auto space-y-6 rounded-xl p-6 bg-gray-100">
 		<Popup
 			open={Boolean(deleteId)}
 			type="cancel"
@@ -97,14 +101,14 @@ return (
 		/>
 
 		<div className="flex justify-between items-center">
-				<h1 className="text-2xl font-bold text-slate-700">
+				<h1 className="text-3xl font-bold text-slate-700">
 					<FontAwesomeIcon icon={faReceipt} className="mr-2" />
 					Overview
 				</h1>
 				<div>
 					<button
 						onClick={handleExport}
-						className="bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 px-4 rounded-md"
+						className="bg-blue-500 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-md"
 					>
 						<FontAwesomeIcon icon={faDownload} className="mr-2" />
 						Export CSV
@@ -120,7 +124,7 @@ return (
 				</div>
 			) : (
 				<>
-					<ExpenseChart expenses={expenses} />
+					<ExpenseChart expenses={expenses} theme={theme} />
 
 
 					<div>
@@ -162,8 +166,8 @@ return (
 										<span
 											className="inline-block px-2.5 py-1 text-xs font-medium rounded-md"
 											style={{
-												backgroundColor: `${categoryColor}20`,
-												color: categoryColor,
+												backgroundColor: `${categoryColor}`,
+												color: "#fff",
 											}}
 										>
 											{category}

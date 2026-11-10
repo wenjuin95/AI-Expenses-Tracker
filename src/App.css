@@ -1,1 +1,103 @@
 @import "tailwindcss";
+
+:root {
+	--app-background: #fdf9ed;
+	--app-backgound-muted: #f8fafc;
+	--app-surface: #ffffff;
+	--app-surface-muted: #f8fafc;
+	--app-border-subtle: #f1f5f9;
+	--app-border: #e2e8f0;
+	--app-border-strong: #cbd5e1;
+	--app-text: #0f172a;
+	--app-text-secondary: #334155;
+	--app-text-muted: #64748b;
+	--app-text-faint: #94a3b8;
+	--app-accent-soft: #dbeafe;
+	--app-accent: #2563eb;
+	--app-accent-hover: #1d4ed8;
+	--app-success-soft: #d1fae5;
+	--app-success: #059669;
+	--app-success-hover: #047857;
+	--app-danger-soft: #fef2f2;
+	--app-danger: #ef4444;
+	--app-danger-hover: #b91c1c;
+	--app-warning-soft: #fef3c7;
+	--app-warning: #d97706;
+	--app-warning-hover: #b45309;
+	--app-category-food: #f59e0b;
+	--app-category-transport: #4287f5;
+	--app-category-utilities: #10b981;
+	--app-category-shopping: #50cc49;
+	--app-category-entertainment: #8b5cf6;
+	--app-category-health: #ec4899;
+	--app-category-other: #64748b;
+	--app-category-uncategorized: #94a3b8;
+}
+
+[data-theme="dark"] {
+	--app-background: #0f172a;
+	--app-backgound-muted: #1e293b;
+	--app-surface: #1e293b;
+	--app-surface-muted: #334155;
+	--app-border-subtle: #334155;
+	--app-border: #475569;
+	--app-border-strong: #64748b;
+	--app-text: #f8fafc;
+	--app-text-secondary: #e2e8f0;
+	--app-text-muted: #cbd5e1;
+	--app-text-faint: #94a3b8;
+	--app-accent-soft: #1e3a8a;
+	--app-accent: #60a5fa;
+	--app-accent-hover: #93c5fd;
+	--app-success-soft: #064e3b;
+	--app-success: #34d399;
+	--app-success-hover: #6ee7b7;
+	--app-danger-soft: #450a0a;
+	--app-danger: #f87171;
+	--app-danger-hover: #fca5a5;
+	--app-warning-soft: #78350f;
+	--app-warning: #fbbf24;
+	--app-warning-hover: #fcd34d;
+}
+
+@theme {
+	--color-white: var(--app-surface);
+	--color-gray-100: var(--app-background);
+	--color-slate-50: var(--app-surface-muted);
+	--color-slate-100: var(--app-border-subtle);
+	--color-slate-200: var(--app-border);
+	--color-slate-300: var(--app-border-strong);
+	--color-slate-400: var(--app-text-faint);
+	--color-slate-500: var(--app-text-muted);
+	--color-slate-600: var(--app-text-secondary);
+	--color-slate-700: var(--app-text-secondary);
+	--color-slate-800: var(--app-text);
+	--color-slate-900: var(--app-text);
+	--color-blue-50: var(--app-accent-soft);
+	--color-blue-100: var(--app-accent-soft);
+	--color-blue-500: var(--app-accent);
+	--color-blue-600: var(--app-accent);
+	--color-blue-700: var(--app-accent-hover);
+	--color-emerald-50: var(--app-success-soft);
+	--color-emerald-100: var(--app-success-soft);
+	--color-emerald-500: var(--app-success);
+	--color-emerald-600: var(--app-success);
+	--color-emerald-700: var(--app-success-hover);
+	--color-red-50: var(--app-danger-soft);
+	--color-red-100: var(--app-danger-soft);
+	--color-red-200: var(--app-danger-soft);
+	--color-red-500: var(--app-danger);
+	--color-red-600: var(--app-danger);
+	--color-red-700: var(--app-danger-hover);
+	--color-amber-50: var(--app-warning-soft);
+	--color-amber-100: var(--app-warning-soft);
+	--color-amber-500: var(--app-warning);
+	--color-amber-600: var(--app-warning);
+	--color-amber-700: var(--app-warning-hover);
+
+}
+
+body {
+	background-color: var(--app-background);
+	color: var(--app-text);
+}

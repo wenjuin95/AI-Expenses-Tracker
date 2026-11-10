@@ -14,9 +14,17 @@ ChartJS.register(ArcElement, Tooltip, Legend);
 
 interface ExpenseChartProps {
     expenses: Receipt[];
+    theme: "light" | "dark";
 }
 
-export default function ExpenseChart({ expenses }: ExpenseChartProps) {
+function resolveColor(color: string) {
+    if (!color.startsWith('var(')) return color;
+
+    const variableName = color.slice(4, -1).trim();
+    return getComputedStyle(document.documentElement).getPropertyValue(variableName).trim();
+}
+
+export default function ExpenseChart({ expenses, theme }: ExpenseChartProps) {
     // Process data to group totals by category
     const chartData = useMemo(() => {
         const categoryTotals = expenses.reduce((acc, expense) => {
@@ -30,9 +38,10 @@ export default function ExpenseChart({ expenses }: ExpenseChartProps) {
 
         const labels = Object.keys(categoryTotals);
         const data = Object.values(categoryTotals);
-        const colors = labels.map((label) =>
-            EXPENSE_CATEGORY_COLORS[label as keyof typeof EXPENSE_CATEGORY_COLORS] ?? UNCATEGORIZED_COLOR
-        );
+        const colors = labels.map((label) => {
+            const color = EXPENSE_CATEGORY_COLORS[label as keyof typeof EXPENSE_CATEGORY_COLORS] ?? UNCATEGORIZED_COLOR;
+            return resolveColor(color);
+        });
 
         return {
             labels,
@@ -46,7 +55,7 @@ export default function ExpenseChart({ expenses }: ExpenseChartProps) {
                 }
             ]
         } as ChartData<'doughnut'>;
-    }, [expenses]);
+    }, [expenses, theme]);
 
     // If there are no expenses with amounts, don't render the chart
     if (expenses.length === 0 || chartData.datasets[0].data.length === 0) {
