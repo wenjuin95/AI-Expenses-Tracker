@@ -165,7 +165,6 @@ export default function ManualEntry() {
 								>
 									<option value="Food">Food</option>
 									<option value="Transport">Transport</option>
-									<option value="Utilities">Utilities</option>
 									<option value="Shopping">Shopping</option>
 									<option value="Entertainment">Entertainment</option>
 									<option value="Health">Health</option>

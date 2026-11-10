@@ -3,11 +3,30 @@ import { Type } from '@google/genai';
 export type ExpenseCategory =
   | "Food"
   | "Transport"
-  | "Utilities"
   | "Shopping"
   | "Entertainment"
   | "Health"
   | "Other";
+
+export const EXPENSE_CATEGORIES: ExpenseCategory[] = [
+  "Food",
+  "Transport",
+  "Shopping",
+  "Entertainment",
+  "Health",
+  "Other",
+];
+
+export const EXPENSE_CATEGORY_COLORS: Record<ExpenseCategory, string> = {
+  Food: "#f59e0b",
+  Transport: "#4287f5",
+  Shopping: "#50cc49",
+  Entertainment: "#8b5cf6",
+  Health: "#ec4899",
+  Other: "#64748b",
+};
+
+export const UNCATEGORIZED_COLOR = "#94a3b8";
 
 export interface ReceiptItem {
   name: string;
@@ -45,7 +64,7 @@ export const receiptSchema = {
     payment_method: { type: Type.STRING, description: "Method of payment (e.g., Cash, Credit Card, E-Wallet)" },
     category: {
       type: Type.STRING,
-      enum: ["Food", "Transport", "Utilities", "Shopping", "Entertainment", "Health", "Other"]
+      enum: ["Food", "Transport", "Shopping", "Entertainment", "Health", "Other"]
     },
     items: {
       type: Type.ARRAY,

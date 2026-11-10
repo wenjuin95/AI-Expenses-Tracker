@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash, faReceipt, faChevronDown, faDownload } from "@fortawesome/free-solid-svg-icons";
 import { getSavedExpenses, deleteExpense } from "../api/expenseApi";
 import type { Receipt } from "../types/expenses";
+import { EXPENSE_CATEGORY_COLORS, UNCATEGORIZED_COLOR } from "../types/expenses";
 import ExpenseChart from "../components/Chart";
 import { exportCsv } from "../components/ExportFile";
 
@@ -98,9 +99,17 @@ return (
 
 					<div>
 						{expenses.map((expense) => (
+							(() => {
+								const category = expense.category || "Uncategorized";
+								const categoryColor =
+									EXPENSE_CATEGORY_COLORS[category as keyof typeof EXPENSE_CATEGORY_COLORS] ??
+									UNCATEGORIZED_COLOR;
+
+								return (
 							<div
 								key={expense.id}
-								className="bg-white border border-slate-200 rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow relative"
+								className="bg-white border border-slate-200 border-l-4 rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow relative"
+								style={{ borderLeftColor: categoryColor }}
 							>
 								{/* Delete Button */}
 								<button
@@ -124,8 +133,14 @@ return (
 								{/* Totals */}
 								<div className="mt-4 pt-4 border-t border-slate-100 flex items-end justify-between">
 									<div>
-										<span className="inline-block px-2.5 py-1 bg-slate-200 text-slate-600 text-xs font-medium rounded-md">
-											{expense.category || "Uncategorized"}
+										<span
+											className="inline-block px-2.5 py-1 text-xs font-medium rounded-md"
+											style={{
+												backgroundColor: `${categoryColor}20`,
+												color: categoryColor,
+											}}
+										>
+											{category}
 										</span>
 									</div>
 									<div className="text-right">
@@ -171,6 +186,8 @@ return (
 								)}
 
 							</div>
+								);
+							})()
 						))}
 					</div>
 				</>

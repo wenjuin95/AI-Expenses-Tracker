@@ -7,7 +7,7 @@ import {
 } from 'chart.js';
 import type { ChartData } from 'chart.js';
 import { Doughnut } from 'react-chartjs-2';
-import type { Receipt } from '../types/expenses';
+import { EXPENSE_CATEGORY_COLORS, UNCATEGORIZED_COLOR, type Receipt } from '../types/expenses';
 
 // Register the required Chart.js elements
 ChartJS.register(ArcElement, Tooltip, Legend);
@@ -30,6 +30,9 @@ export default function ExpenseChart({ expenses }: ExpenseChartProps) {
 
         const labels = Object.keys(categoryTotals);
         const data = Object.values(categoryTotals);
+        const colors = labels.map((label) =>
+            EXPENSE_CATEGORY_COLORS[label as keyof typeof EXPENSE_CATEGORY_COLORS] ?? UNCATEGORIZED_COLOR
+        );
 
         return {
             labels,
@@ -37,15 +40,7 @@ export default function ExpenseChart({ expenses }: ExpenseChartProps) {
                 {
                     label: 'Total Spent',
                     data,
-                    backgroundColor: [
-                        '#3b82f6', // blue-500
-                        '#10b981', // emerald-500
-                        '#f59e0b', // amber-500
-                        '#ef4444', // red-500
-                        '#8b5cf6', // violet-500
-                        '#ec4899', // pink-500
-                        '#64748b', // slate-500
-                    ],
+                    backgroundColor: colors,
                     borderWidth: 1,
                     hoverOffset: 4
                 }
