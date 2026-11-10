@@ -1,9 +1,10 @@
 import { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTrash, faReceipt, faChevronDown } from "@fortawesome/free-solid-svg-icons";
+import { faTrash, faReceipt, faChevronDown, faDownload } from "@fortawesome/free-solid-svg-icons";
 import { getSavedExpenses, deleteExpense } from "../api/expenseApi";
 import type { Receipt } from "../types/expenses";
 import ExpenseChart from "../components/Chart";
+import { exportCsv } from "../components/ExportFile";
 
 export default function ExpenseOverview() {
 	const [expenses, setExpenses] = useState<Receipt[]>([]);
@@ -18,6 +19,7 @@ export default function ExpenseOverview() {
 		try {
 			setLoading(true);
 			const data = await getSavedExpenses();
+			console.log("Fetched expenses:", data); // Debugging log
 
 			// Sort by newest first (using the createdAt timestamp)
 			const sortedData = data.sort((a, b) => {
@@ -49,6 +51,10 @@ export default function ExpenseOverview() {
 		}
 	};
 
+	const handleExport = () => {
+		exportCsv(expenses);
+	};
+
 	if (loading) {
 		return (
 			<div className="flex justify-center items-center h-64">
@@ -63,11 +69,20 @@ export default function ExpenseOverview() {
 
 return (
 		<div className="max-w-7xl mx-auto space-y-6 border-slate-200 rounded-xl p-6 bg-gray-100 shadow-sm">
-			<div>
+			<div className="flex justify-between items-center">
 				<h1 className="text-2xl font-bold text-slate-700">
 					<FontAwesomeIcon icon={faReceipt} className="mr-2" />
 					Overview
 				</h1>
+				<div>
+					<button
+						onClick={handleExport}
+						className="bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 px-4 rounded-md"
+					>
+						<FontAwesomeIcon icon={faDownload} className="mr-2" />
+						Export CSV
+					</button>
+				</div>
 			</div>
 
 			{expenses.length === 0 ? (
@@ -79,6 +94,7 @@ return (
 			) : (
 				<>
 					<ExpenseChart expenses={expenses} />
+
 
 					<div>
 						{expenses.map((expense) => (
@@ -108,7 +124,7 @@ return (
 								{/* Totals */}
 								<div className="mt-4 pt-4 border-t border-slate-100 flex items-end justify-between">
 									<div>
-										<span className="inline-block px-2.5 py-1 bg-slate-100 text-slate-600 text-xs font-medium rounded-md">
+										<span className="inline-block px-2.5 py-1 bg-slate-200 text-slate-600 text-xs font-medium rounded-md">
 											{expense.category || "Uncategorized"}
 										</span>
 									</div>
@@ -135,10 +151,10 @@ return (
 											{/* Dropdown Content */}
 											<div className="mt-3 space-y-2 max-h-40 overflow-y-auto pr-1">
 												{expense.items.map((item, idx) => (
-													<div key={idx} className="flex justify-between items-start text-xs bg-slate-50 p-2 rounded border border-slate-100">
+													<div key={idx} className="flex justify-between items-start text-xs bg-slate-200 p-2 rounded">
 														<div className="flex-1 pr-2 truncate">
-															<span className="font-semibold text-slate-700 mr-1.5">
-																{item.quantity}x
+															<span className="font-semibold text-slate-700 mr-1.5 px-1.5 py-0.3 bg-white">
+																{item.quantity}
 															</span>
 															<span className="text-slate-600">
 																{item.name || "Unknown Item"}
