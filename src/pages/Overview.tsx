@@ -6,11 +6,14 @@ import type { Receipt } from "../types/expenses";
 import { EXPENSE_CATEGORY_COLORS, UNCATEGORIZED_COLOR } from "../types/expenses";
 import ExpenseChart from "../components/Chart";
 import { exportCsv } from "../components/ExportFile";
+import Popup from "../components/Popup";
 
 export default function ExpenseOverview() {
 	const [expenses, setExpenses] = useState<Receipt[]>([]);
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState<string | null>(null);
+	const [deleteId, setDeleteId] = useState<string | null>(null);
+	const [deleteError, setDeleteError] = useState<string | null>(null);
 
 	useEffect(() => {
 		loadExpenses();
@@ -40,15 +43,20 @@ export default function ExpenseOverview() {
 	const handleDelete = async (id: string | undefined) => {
 		if (!id) return;
 
-		// Native browser confirmation dialog
-		if (!window.confirm("Are you sure you want to delete this receipt?")) return;
+		setDeleteId(id);
+	};
 
+	const confirmDelete = async () => {
+		if (!deleteId) return;
+
+		const id = deleteId;
+		setDeleteId(null);
 		try {
 			await deleteExpense(id);
 			// Instantly remove it from the screen without reloading from the database
 			setExpenses((prev) => prev.filter((expense) => expense.id !== id));
 		} catch (err) {
-			alert("Failed to delete the receipt.");
+			setDeleteError("Failed to delete the receipt.");
 		}
 	};
 
@@ -70,7 +78,25 @@ export default function ExpenseOverview() {
 
 return (
 		<div className="max-w-7xl mx-auto space-y-6 border-slate-200 rounded-xl p-6 bg-gray-100 shadow-sm">
-			<div className="flex justify-between items-center">
+		<Popup
+			open={Boolean(deleteId)}
+			type="cancel"
+			title="Delete Receipt?"
+			message="Are you sure you want to delete this receipt?"
+			onOk={confirmDelete}
+			onCancel={() => setDeleteId(null)}
+			okLabel="Delete"
+		/>
+
+		<Popup
+			open={Boolean(deleteError)}
+			type="error"
+			title="Delete Error"
+			message={deleteError ?? ""}
+			onOk={() => setDeleteError(null)}
+		/>
+
+		<div className="flex justify-between items-center">
 				<h1 className="text-2xl font-bold text-slate-700">
 					<FontAwesomeIcon icon={faReceipt} className="mr-2" />
 					Overview
