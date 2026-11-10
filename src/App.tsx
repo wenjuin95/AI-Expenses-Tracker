@@ -5,6 +5,7 @@ import { faCamera, faKeyboard, faArrowLeft, faMoon, faSun } from "@fortawesome/f
 import ReceiptScanner from './pages/ReceiptScanner'
 import ExpenseOverview from './pages/Overview'
 import ManualEntry from "./pages/ManualEntry";
+import logo from './assets/expense-tracker-logo.png'
 import './App.css'
 
 function App() {
@@ -27,7 +28,7 @@ function App() {
 return (
 		<div className="max-w-4xl mx-auto space-y-8 p-4 md:p-6">
 			<div className="flex items-center mx-2 lg:justify-center">
-				<img src="/expense-tracker-logo.png" alt="Expense Tracker Logo" className="h-25 w-30 lg:h-45 lg:w-50" />
+				<img src={logo} alt="Expense Tracker Logo" className="h-25 w-30 lg:h-45 lg:w-50" />
 				<div className="relative">
 					<h1 className="whitespace-nowrap font-extrabold text-4xl pl-2 text-slate-900 sm:text-4xl lg:text-7xl lg:pl-4">
 						Expense<br />Tracker
