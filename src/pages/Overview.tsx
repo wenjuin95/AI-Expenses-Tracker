@@ -101,14 +101,14 @@ return (
 		/>
 
 		<div className="flex justify-between items-center">
-				<h1 className="text-3xl font-bold text-slate-700">
+				<h1 className="text-2xl lg:text-4xl font-bold text-slate-700">
 					<FontAwesomeIcon icon={faReceipt} className="mr-2" />
 					Overview
 				</h1>
 				<div>
 					<button
 						onClick={handleExport}
-						className="bg-blue-500 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-md"
+						className="bg-blue-500 hover:bg-blue-700 text-white text-sm font-medium py-2 px-4 rounded-md"
 					>
 						<FontAwesomeIcon icon={faDownload} className="mr-2" />
 						Export CSV
