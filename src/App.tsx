@@ -1,13 +1,14 @@
 import { useEffect, useState } from 'react'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCamera, faKeyboard, faArrowLeft, faMoon, faSun } from "@fortawesome/free-solid-svg-icons";
+import logo from './assets/expense-tracker-logo.png'
+import './App.css'
 
 import Popup from './components/Popup'
 import ReceiptScanner from './pages/ReceiptScanner'
 import ExpenseOverview from './pages/Overview'
 import ManualEntry from "./pages/ManualEntry";
-import logo from './assets/expense-tracker-logo.png'
-import './App.css'
+import Footer from './pages/Footer'
 
 function App() {
 	const [activeView, setActiveView] = useState<'menu' | 'scan' | 'manual'>('menu');
@@ -148,6 +149,9 @@ return (
 			<div className="pt-6 border-t border-slate-200 mt-12">
 				<ExpenseOverview theme={theme} />
 			</div>
+
+			{/* Footer Section */}
+			<Footer />
 		</div>
 	);
 }
