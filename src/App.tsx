@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCamera, faKeyboard, faArrowLeft, faMoon, faSun } from "@fortawesome/free-solid-svg-icons";
 
+import Popup from './components/Popup'
 import ReceiptScanner from './pages/ReceiptScanner'
 import ExpenseOverview from './pages/Overview'
 import ManualEntry from "./pages/ManualEntry";
@@ -14,6 +15,10 @@ function App() {
 		const savedTheme = localStorage.getItem("expense-tracker-theme");
 		if (savedTheme === "light" || savedTheme === "dark") return savedTheme;
 		return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+	});
+	const [isOpen, setIsOpen] = useState<boolean>(() => {
+		const dontShowAgain = localStorage.getItem("dashboard-update-popup-v1");
+		return dontShowAgain !== "true"; // Show the popup if not set to "true"
 	});
 
 	useEffect(() => {
@@ -28,6 +33,16 @@ function App() {
 return (
 		<div className="max-w-4xl mx-auto space-y-8 p-4 md:p-6">
 			<div className="flex items-center mx-2 lg:justify-center">
+				<Popup
+					open={isOpen}
+					type="info"
+					title="Welcome to Expense Tracker"
+					message="Check out our new AI-powered receipt scanning feature! Give it a try!"
+					onOk={() => setIsOpen(false)}
+					showDontShowAgain={true}
+					storageKey="dashboard-update-popup-v1"
+				/>
+
 				<img src={logo} alt="Expense Tracker Logo" className="h-25 w-30 lg:h-45 lg:w-50" />
 				<div className="relative">
 					<h1 className="whitespace-nowrap font-extrabold text-4xl pl-2 text-slate-900 sm:text-4xl lg:text-7xl lg:pl-4">
