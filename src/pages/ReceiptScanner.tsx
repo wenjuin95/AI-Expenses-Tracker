@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTrash, faKey } from "@fortawesome/free-solid-svg-icons";
+import { faTrash, faKey, faChevronRight } from "@fortawesome/free-solid-svg-icons";
 import type { Receipt } from "../types/expenses";
 import { getErrorMessage } from "../types/errors";
 
@@ -112,10 +112,31 @@ export default function ReceiptScanner({ onReviewComplete }: ReceiptScannerProps
 					<div className="w-12 h-12 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center mb-4 text-xl">
 						<FontAwesomeIcon icon={faKey} />
 					</div>
+
 					<h2 className="text-xl font-bold text-slate-900 mb-2">Setup Gemini API</h2>
+
 					<p className="text-sm text-slate-500 mb-6">
 						To use the AI receipt scanner, please enter your own Google Gemini API key. This key is saved locally on your device and is never sent to our servers.
 					</p>
+
+					<details className="group mb-6 [&_summary::-webkit-details-marker]:hidden">
+						<summary className="flex items-center text-sm font-semibold text-slate-900 cursor-pointer list-none select-none">
+							<FontAwesomeIcon
+								icon={faChevronRight}
+								className="h-3 w-3 text-slate-500 transition-transform group-open:rotate-90"
+							/>
+							<span className="ml-2 text-slate-500">Setup Guide</span>
+						</summary>
+						<p className="text-sm text-slate-500 mt-4">
+							1. Visit <a href="https://aistudio.google.com/app/apikey" target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline">Google AI Studio</a>.<br />
+							2. Sign in with your Google account.<br />
+							3. Click on API keys in the left sidebar or the top navigation menu.<br />
+							4. Click the Create API key button.<br />
+							5. Select an existing Google Cloud project or let AI Studio automatically create a new key-project pair for you.<br />
+							6. Copy the generated API key and paste it into the input field below.<br />
+							7. Click Save to store your API key locally.
+						</p>
+					</details>
 
 					<div className="space-y-4">
 						<div>
@@ -140,6 +161,7 @@ export default function ReceiptScanner({ onReviewComplete }: ReceiptScannerProps
 						<p className="text-xs text-center text-slate-400 mt-4">
 							Don't have a key? Get one for free from <a href="https://aistudio.google.com/app/apikey" target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline">Google AI Studio</a>.
 						</p>
+
 					</div>
 				</div>
 			</>
