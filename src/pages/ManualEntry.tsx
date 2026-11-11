@@ -230,7 +230,7 @@ export default function ManualEntry() {
 									step="0.01"
 									value={calculatedTotal || ""}
 									readOnly
-									className="w-full border border-blue-400 bg-blue-50 rounded-lg px-3 py-2 text-sm font-bold text-blue-900"
+									className="w-full border border-blue-400 bg-blue-50 rounded-lg px-3 py-2 text-sm font-bold text-slate-700"
 								/>
 							</div>
 						</div>

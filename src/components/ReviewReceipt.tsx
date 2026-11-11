@@ -279,7 +279,7 @@ export default function ReviewReceipt({
                                     step="0.01"
                                     value={draft.total_amount ?? ""}
                                     onChange={(e) => updateField("total_amount", e.target.value === "" ? 0 : Number(e.target.value))}
-                                    className="w-full border border-blue-400 bg-blue-50 rounded-lg px-3 py-2 text-sm font-bold text-blue-900"
+                                    className="w-full border border-blue-400 bg-blue-50 rounded-lg px-3 py-2 text-sm font-bold text-slate-700"
                                 />
                             </div>
                         </div>
