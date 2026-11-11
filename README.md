@@ -1,7 +1,7 @@
-# AI-Expense-Tracker
+# Expense Tracker
 
 ## About
-AI-Expense-Tracker is a purely client-side web application that leverages the Google Gemini API to parse receipts into structured financial data. It runs entirely in the browser without a backend or external database.
+Expense Tracker is a purely client-side web application that leverages the Google Gemini API to parse receipts into structured financial data. It runs entirely in the browser without a backend or external database.
 
 
 Demo:
