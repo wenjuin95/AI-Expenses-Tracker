@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCamera, faKeyboard, faArrowLeft, faMoon, faSun } from "@fortawesome/free-solid-svg-icons";
+import { faCamera, faKeyboard, faArrowLeft, faMoon, faSun, faCommentDots } from "@fortawesome/free-solid-svg-icons";
 import logo from './assets/expense-tracker-logo.png'
 import './App.css'
 
@@ -9,9 +9,11 @@ import ReceiptScanner from './pages/ReceiptScanner'
 import ExpenseOverview from './pages/Overview'
 import ManualEntry from "./pages/ManualEntry";
 import Footer from './pages/Footer'
+import Feedback from './components/Feedback'
 
 function App() {
 	const [activeView, setActiveView] = useState<'menu' | 'scan' | 'manual'>('menu');
+	const [isFeedbackOpen, setIsFeedbackOpen] = useState(false);
 	const [theme, setTheme] = useState<"light" | "dark">(() => {
 		const savedTheme = localStorage.getItem("expense-tracker-theme");
 		if (savedTheme === "light" || savedTheme === "dark") return savedTheme;
@@ -34,6 +36,8 @@ function App() {
 return (
 		<div className="max-w-4xl mx-auto space-y-8 p-4 md:p-6">
 			<div className="flex items-center mx-2 lg:justify-center">
+
+				{/* notice popup */}
 				<Popup
 					open={isOpen}
 					type="info"
@@ -44,6 +48,26 @@ return (
 					storageKey="dashboard-update-popup-v1"
 				/>
 
+				{/* feedback form*/}
+				<div>
+					<button
+						type="button"
+						onClick={() => setIsFeedbackOpen(true)}
+						aria-label="Open feedback form"
+						title="Send feedback"
+						className="fixed bottom-6 right-6 z-40 flex h-14 w-14 items-center justify-center rounded-full bg-blue-600 text-white shadow-lg transition hover:bg-blue-700 hover:shadow-xl focus:outline-none focus:ring-4 focus:ring-blue-300 border border-strong"
+						hidden={isFeedbackOpen}
+					>
+						<FontAwesomeIcon icon={faCommentDots} className="text-xl" />
+					</button>
+
+					<Feedback
+						isOpen={isFeedbackOpen}
+						onClose={() => setIsFeedbackOpen(false)}
+					/>
+				</div>
+
+				{/* Tittle and Theme Switcher Section */}
 				<img src={logo} alt="Expense Tracker Logo" className="h-25 w-30 lg:h-45 lg:w-50" />
 				<div className="relative">
 					<h1 className="whitespace-nowrap font-extrabold text-4xl pl-2 text-slate-900 sm:text-4xl lg:text-7xl lg:pl-4">
@@ -57,8 +81,8 @@ return (
 						aria-pressed={theme === "dark"}
 						className={`absolute -right-14 bottom-0 inline-flex h-6 w-11 items-center rounded-full border p-0.5 transition-colors sm:-right-12 lg:-right-15 lg:h-7 lg:w-12 ${
 							theme === "dark"
-								? "border-blue-500 bg-blue-500"
-								: "border-amber-300 bg-amber-200"
+							? "border-blue-500 bg-blue-500"
+							: "border-amber-300 bg-amber-200"
 						}`}
 					>
 						<span
@@ -78,7 +102,6 @@ return (
 			<div className="p-5">
 				{/* Back Button Area */}
 				<div className="mb-4">
-					{/* Only show the Back button if they are NOT on the menu */}
 					{activeView !== 'menu' && (
 						<div className="flex justify-end w-full">
 							<button
@@ -94,12 +117,12 @@ return (
 
 				{/* Main Content Area */}
 				<div className="flex-1">
-					{/* 1. The Choosing Menu */}
+					{/* Choose Menu */}
 					{activeView === 'menu' && (
 						<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
 
 
-							{/* AI Scan Option Card */}
+							{/* AI Scan */}
 							<button
 								onClick={() => setActiveView('scan')}
 								className="flex flex-col items-center justify-center p-8 bg-white border-2 border-slate-200 rounded-xl hover:border-blue-500 hover:bg-blue-50 transition-all text-center group shadow-sm"
@@ -113,7 +136,7 @@ return (
 								</p>
 							</button>
 
-							{/* Manual Option Card */}
+							{/* Manual entry */}
 							<button
 								onClick={() => setActiveView('manual')}
 								className="flex flex-col items-center justify-center p-8 bg-white border-2 border-slate-200 rounded-xl hover:border-emerald-500 hover:bg-emerald-50 transition-all text-center group shadow-sm"
@@ -129,14 +152,14 @@ return (
 						</div>
 					)}
 
-					{/* 2. The AI Scanner Component */}
+					{/* AI Scanner Component */}
 					{activeView === 'scan' && (
 						<div className="animate-in fade-in slide-in-from-bottom-4 duration-300">
 							<ReceiptScanner onReviewComplete={() => setActiveView('menu')} />
 						</div>
 					)}
 
-					{/* 3. The Manual Entry Component */}
+					{/* Manual Entry Component */}
 					{activeView === 'manual' && (
 						<div className="animate-in fade-in slide-in-from-bottom-4 duration-300">
 							<ManualEntry />
@@ -145,7 +168,7 @@ return (
 				</div>
 			</div>
 
-			{/* Persistent Overview Section */}
+			{/* Overview Section */}
 			<div className="pt-6 border-t border-slate-200 mt-12">
 				<ExpenseOverview theme={theme} />
 			</div>
