@@ -18,6 +18,7 @@ interface PopupProps {
 	onOk?: () => void;
 	onCancel?: () => void;
 	okLabel?: string;
+	showOkButton?: boolean;
 	cancelLabel?: string;
 	showDontShowAgain?: boolean;
 	storageKey?: string;
@@ -61,6 +62,7 @@ export default function Popup({
 	onOk,
 	onCancel,
 	okLabel = "OK",
+	showOkButton = true,
 	cancelLabel = "Cancel",
 	showDontShowAgain = false,
 	storageKey,
@@ -158,7 +160,7 @@ export default function Popup({
 								{cancelLabel}
 							</button>
 						)}
-						{onOk && (
+						{onOk && showOkButton && (
 							<button
 								type="button"
 								onClick={() => handleClose(onOk)}

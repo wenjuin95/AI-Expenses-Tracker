@@ -9,6 +9,7 @@ export default function ManualEntry() {
 	const [saving, setSaving] = useState(false);
 	const [error, setError] = useState<string | null>(null);
 	const [showSavePopup, setShowSavePopup] = useState(false);
+	const [saveSuccess, setSaveSuccess] = useState(false);
 
 	// Start with a blank default state
 	const [draft, setDraft] = useState<Receipt>({
@@ -101,13 +102,17 @@ export default function ManualEntry() {
 			setSaving(true);
 			setError(null);
 
+			if (navigator.onLine === false) {
+				throw new Error("You are currently offline. Please check your internet connection and try again.");
+			}
+
 			await saveExpense(expenseToSave);
 
-			// Reload the page to reset the form and refresh the overview list below
-			window.location.reload();
+			setSaving(false);
+			setSaveSuccess(true);
 
 		} catch (err) {
-			setError(err instanceof Error ? err.message : "Failed to save expense.");
+			throw new Error(err instanceof Error ? err.message : "Failed to save expense.");
 			setSaving(false);
 		}
 	};
@@ -124,17 +129,28 @@ export default function ManualEntry() {
 				okLabel="Save"
 			/>
 
+			<Popup
+				open={saveSuccess}
+				type="success"
+				title="Saved Successfully"
+				message="Your expense has been saved successfully."
+				onOk={() => window.location.reload()}
+				showOkButton={false}
+			/>
+
+			<Popup
+				open={Boolean(error)}
+				type="error"
+				title="Error"
+				message={error ?? ""}
+				onOk={() => setError(null)}
+			/>
+
 			<form onSubmit={handleSave} className="bg-white border border-slate-200 rounded-xl shadow-sm overflow-hidden">
 				<div className="px-6 py-4 border-b border-slate-200 bg-blue-500">
 					<h2 className="text-lg font-bold text-white">Manual Entry</h2>
 					<p className="text-xs text-slate-50 mt-1">Add a new expense manually</p>
 				</div>
-
-				{error && (
-					<div className="mx-6 mt-4 p-3 bg-red-50 text-red-700 text-sm rounded-lg border border-red-200">
-						{error}
-					</div>
-				)}
 
 				<div className="p-6 space-y-6">
 					{/* Basic Details */}

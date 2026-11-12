@@ -18,6 +18,10 @@ export default function ExpenseOverview({ theme }: ExpenseOverviewProps) {
 	const [error, setError] = useState<string | null>(null);
 	const [deleteId, setDeleteId] = useState<string | null>(null);
 	const [deleteError, setDeleteError] = useState<string | null>(null);
+	const [deleteSuccess, setDeleteSuccess] = useState<boolean | null>(null);
+	const [exportLoading, setExportLoading] = useState(false);
+	const [exportCountdown, setExportCountdown] = useState(0);
+	const [exportError, setExportError] = useState<string | null>(null);
 
 	useEffect(() => {
 		loadExpenses();
@@ -57,15 +61,36 @@ export default function ExpenseOverview({ theme }: ExpenseOverviewProps) {
 		setDeleteId(null);
 		try {
 			await deleteExpense(id);
-			// Instantly remove it from the screen without reloading from the database
 			setExpenses((prev) => prev.filter((expense) => expense.id !== id));
+			setDeleteSuccess(true);
 		} catch (err) {
 			setDeleteError("Failed to delete the receipt.");
 		}
 	};
 
-	const handleExport = () => {
-		exportCsv(expenses);
+	const handleExport = async () => {
+		if (exportLoading) return;
+
+		if (!navigator.onLine) {
+			setExportError("No internet connection detected. Please reconnect and try again.");
+			return;
+		}
+
+		setExportLoading(true);
+
+		try {
+			for (let seconds = 3; seconds > 0; seconds -= 1) {
+				setExportCountdown(seconds);
+				await new Promise((resolve) => setTimeout(resolve, 1000));
+			}
+
+			setExportCountdown(0);
+			exportCsv(expenses);
+		} catch (err) {
+			setExportError(err instanceof Error ? err.message : "Failed to export expenses.");
+		} finally {
+			setExportLoading(false);
+		}
 	};
 
 	if (loading) {
@@ -100,6 +125,36 @@ return (
 			onOk={() => setDeleteError(null)}
 		/>
 
+		<Popup
+			open={Boolean(exportError)}
+			type="error"
+			title="Export Error"
+			message={exportError ?? ""}
+			onOk={() => setExportError(null)}
+		/>
+
+		{exportLoading && (
+			<div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/50">
+				<div className="rounded-xl bg-white px-8 py-6 text-center shadow-xl">
+					<div className="mx-auto mb-3 h-8 w-8 animate-spin rounded-full border-4 border-slate-200 border-t-blue-600" />
+					<p className="mt-1 text-sm text-slate-500">Preparing your download</p>
+					<p className="font-medium text-slate-800">
+						{exportCountdown > 0 ? `Downloading in ${exportCountdown}...` : "Checking connection..."}
+					</p>
+				</div>
+			</div>
+		)}
+
+		{deleteSuccess && (
+			<Popup
+				open={deleteSuccess}
+				type="success"
+				title="Receipt Deleted"
+				message="The receipt has been successfully deleted."
+				onOk={() => setDeleteSuccess(null)}
+			/>
+		)}
+
 		<div className="flex justify-between items-center">
 				<h1 className="text-2xl lg:text-4xl font-bold text-slate-700">
 					<FontAwesomeIcon icon={faReceipt} className="mr-2" />
@@ -108,10 +163,11 @@ return (
 				<div>
 					<button
 						onClick={handleExport}
+						disabled={exportLoading}
 						className="bg-blue-500 hover:bg-blue-700 text-white text-sm font-medium py-2 px-4 rounded-md"
 					>
 						<FontAwesomeIcon icon={faDownload} className="mr-2" />
-						Export CSV
+						{exportLoading ? "Preparing..." : "Export CSV"}
 					</button>
 				</div>
 			</div>
