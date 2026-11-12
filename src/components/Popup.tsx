@@ -33,18 +33,18 @@ const popupStyles: Record<
 > = {
 	error: {
 		icon: faCircleExclamation,
-		iconClass: "text-red-500 text-4xl",
-		buttonClass: "bg-red-600 hover:bg-red-700 focus:ring-red-500",
+		iconClass: "text-blue-500 text-4xl",
+		buttonClass: "bg-blue-600 hover:bg-blue-700 focus:ring-blue-500",
 	},
 	success: {
 		icon: faCircleCheck,
-		iconClass: "text-emerald-500 text-4xl",
-		buttonClass: "bg-emerald-600 hover:bg-emerald-700 focus:ring-emerald-500",
+		iconClass: "text-blue-500 text-4xl",
+		buttonClass: "bg-blue-600 hover:bg-blue-700 focus:ring-blue-500",
 	},
 	cancel: {
 		icon: faCircleQuestion,
-		iconClass: "text-amber-500 text-4xl",
-		buttonClass: "bg-amber-600 hover:bg-amber-700 focus:ring-amber-500",
+		iconClass: "text-blue-500 text-4xl",
+		buttonClass: "bg-blue-600 hover:bg-blue-700 focus:ring-blue-500",
 	},
 	info: {
 		icon: faCircleInfo,

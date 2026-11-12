@@ -106,7 +106,7 @@ return (
 						<div className="flex justify-end w-full">
 							<button
 								onClick={() => setActiveView('menu')}
-								className="text-sm font-medium text-slate-600 hover:text-slate-900 flex items-center gap-2 bg-white border border-slate-300 hover:bg-slate-50 px-4 py-2 rounded-lg transition-colors"
+								className="text-sm font-medium text-white flex items-center gap-2 bg-blue-500 border border-slate-300 hover:bg-blue-700 px-4 py-2 rounded-lg transition-colors"
 							>
 								<FontAwesomeIcon icon={faArrowLeft} />
 								Back to Menu
@@ -125,7 +125,7 @@ return (
 							{/* AI Scan */}
 							<button
 								onClick={() => setActiveView('scan')}
-								className="flex flex-col items-center justify-center p-8 bg-white border-2 border-slate-200 rounded-xl hover:border-blue-500 hover:bg-blue-50 transition-all text-center group shadow-sm"
+								className="flex flex-col items-center justify-center p-8 bg-white border-2 border-slate-200 rounded-xl hover:border-blue-500 hover:bg-blue-500 transition-all text-center group shadow-sm"
 							>
 								<div className="w-16 h-16 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
 									<FontAwesomeIcon icon={faCamera} className="text-2xl" />
@@ -139,9 +139,9 @@ return (
 							{/* Manual entry */}
 							<button
 								onClick={() => setActiveView('manual')}
-								className="flex flex-col items-center justify-center p-8 bg-white border-2 border-slate-200 rounded-xl hover:border-emerald-500 hover:bg-emerald-50 transition-all text-center group shadow-sm"
+								className="flex flex-col items-center justify-center p-8 bg-white border-2 border-slate-200 rounded-xl hover:border-blue-500 hover:bg-blue-500 transition-all text-center group shadow-sm"
 							>
-								<div className="w-16 h-16 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+								<div className="w-16 h-16 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
 									<FontAwesomeIcon icon={faKeyboard} className="text-2xl" />
 								</div>
 								<h3 className="text-lg font-bold text-slate-900 mb-1">Manual Entry</h3>

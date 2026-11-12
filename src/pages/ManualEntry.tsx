@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import { saveExpense } from "../api/expenseApi";
 import type { Receipt, ReceiptItem } from "../types/expenses";
 import Popup from "../components/Popup";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faChevronDown } from "@fortawesome/free-solid-svg-icons";
 
 export default function ManualEntry() {
 	const [saving, setSaving] = useState(false);
@@ -12,14 +14,14 @@ export default function ManualEntry() {
 	const [draft, setDraft] = useState<Receipt>({
 		merchant_name: "",
 		date: new Date().toISOString().split('T')[0], // Defaults to today
-		currency: "RM",
+		currency: "",
 		subtotal: 0,
 		discount: 0,
 		tax: 0,
 		total_amount: 0,
 		amount_paid: 0,
 		payment_method: "",
-		category: "Food", // Default category
+		category: undefined,
 		items: [{ name: "", quantity: 0, price: 0 }],
 	});
 
@@ -62,6 +64,11 @@ export default function ManualEntry() {
 
 		if (calculatedTotal <= 0) {
 			setError("Total Amount greater than 0 are required.");
+			return;
+		}
+
+		if (!draft.currency || !draft.payment_method || !draft.category) {
+			setError("Currency, payment method, and category are required.");
 			return;
 		}
 
@@ -118,9 +125,9 @@ export default function ManualEntry() {
 			/>
 
 			<form onSubmit={handleSave} className="bg-white border border-slate-200 rounded-xl shadow-sm overflow-hidden">
-				<div className="px-6 py-4 border-b border-slate-200 bg-slate-50">
-					<h2 className="text-lg font-bold text-slate-900">Manual Entry</h2>
-					<p className="text-xs text-slate-500 mt-1">Add a new expense manually</p>
+				<div className="px-6 py-4 border-b border-slate-200 bg-blue-500">
+					<h2 className="text-lg font-bold text-white">Manual Entry</h2>
+					<p className="text-xs text-slate-50 mt-1">Add a new expense manually</p>
 				</div>
 
 				{error && (
@@ -134,8 +141,10 @@ export default function ManualEntry() {
 					<section>
 						<h3 className="text-sm font-semibold text-slate-900 mb-4">Basic Details</h3>
 						<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+							{/* Merchant Name */}
 							<div>
-								<label className="block text-xs font-medium text-slate-500 mb-1">Merchant *</label>
+								<label className="block text-xs font-medium text-slate-500 mb-1">Merchant</label>
 								<input
 									type="text"
 									value={draft.merchant_name ?? ""}
@@ -157,48 +166,86 @@ export default function ManualEntry() {
 							</div>
 
 							<div>
-								<label className="block text-xs font-medium text-slate-500 mb-1">Category</label>
-								<select
-									value={draft.category ?? ""}
-									onChange={(e) => updateField("category", e.target.value as any)}
-									className="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
-								>
-									<option value="Food">Food</option>
-									<option value="Transport">Transport</option>
-									<option value="Shopping">Shopping</option>
-									<option value="Entertainment">Entertainment</option>
-									<option value="Health">Health</option>
-									<option value="Other">Other</option>
-								</select>
+								<label className="block text-xs font-medium text-slate-500 mb-1">Category *</label>
+								<div className="relative">
+									<select
+										required
+										value={draft.category ?? ""}
+										onChange={(e) => updateField("category", e.target.value as any)}
+										className="w-full appearance-none border border-slate-300 rounded-lg px-4 py-2 text-sm text-slate-700 bg-white hover:border-slate-400 focus:outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 transition-all duration-200 cursor-pointer"
+									>
+										<option value="" disabled>Select a category</option>
+										<option value="Food">Food</option>
+										<option value="Transport">Transport</option>
+										<option value="Shopping">Shopping</option>
+										<option value="Entertainment">Entertainment</option>
+										<option value="Health">Health</option>
+										<option value="Other">Other</option>
+									</select>
+
+									<div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-slate-500 text-xs">
+										<FontAwesomeIcon icon={faChevronDown} />
+									</div>
+								</div>
 							</div>
 
 							<div>
-								<label className="block text-xs font-medium text-slate-500 mb-1">Payment Method</label>
-								<select
-									value={draft.payment_method ?? ""}
-									onChange={(e) => updateField("payment_method", e.target.value)}
-									className="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
-								>
-									<option value="Credit Card">Credit Card</option>
-									<option value="TNG">TNG</option>
-									<option value="Cash">Cash</option>
-								</select>
+								<label className="block text-xs font-medium text-slate-500 mb-1">Payment Method *</label>
+								<div className="relative">
+									<select
+										required
+										value={draft.payment_method ?? ""}
+										onChange={(e) => updateField("payment_method", e.target.value)}
+										className="w-full appearance-none border border-slate-300 rounded-lg px-4 py-2 text-sm text-slate-700 bg-white hover:border-slate-400 focus:outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 transition-all duration-200 cursor-pointer"
+									>
+										<option value="" disabled>Select a payment method</option>
+										<option value="Credit Card">Credit Card</option>
+										<option value="TNG">TNG</option>
+										<option value="Cash">Cash</option>
+									</select>
+
+									<div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-slate-500 text-xs">
+										<FontAwesomeIcon icon={faChevronDown} />
+									</div>
+								</div>
 							</div>
+
 						</div>
 					</section>
 
 					{/* Financials */}
 					<section>
-						<h3 className="text-sm font-semibold text-slate-900 mb-4">Financials</h3>
+						<h3 className="text-sm font-semibold text-slate-900 mb-4">
+							Financials
+						</h3>
 						<div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+
 							<div>
-								<label className="block text-xs font-medium text-slate-500 mb-1">Currency</label>
-								<input
-									type="text"
-									value={draft.currency ?? ""}
-									onChange={(e) => updateField("currency", e.target.value)}
-									className="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm uppercase"
-								/>
+								<label className="block text-xs font-medium text-slate-500 mb-1"> Currency * </label>
+								<div className="relative">
+									<select
+										required
+										value={draft.currency ?? ""}
+										onChange={(e) => updateField("currency", e.target.value)}
+										className="w-full appearance-none border border-slate-300 rounded-lg px-4 py-2 text-sm text-slate-700 bg-white hover:border-slate-400 focus:outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 transition-all duration-200 cursor-pointer"
+									>
+										<option value="" disabled>Select a currency</option>
+										<option value="RM">RM</option>
+										<option value="SGD">SGD</option>
+										<option value="CNY">CNY</option>
+										<option value="TWD">TWD</option>
+										<option value="KRW">KRW</option>
+										<option value="JPN">JPN</option>
+										<option value="IDN">IDN</option>
+										<option value="THB">THB</option>
+										<option value="USD">USD</option>
+									</select>
+
+									{/* Custom Dropdown Arrow */}
+									<div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-slate-500 text-xs">
+										<FontAwesomeIcon icon={faChevronDown} />
+									</div>
+								</div>
 							</div>
 
 							<div>
@@ -223,23 +270,28 @@ export default function ManualEntry() {
 								/>
 							</div>
 
-							<div className="col-span-2">
-								<label className="block text-xs font-bold text-slate-700 mb-1">Total Amount *</label>
-								<input
-									type="number"
-									step="0.01"
-									value={calculatedTotal || ""}
-									readOnly
-									className="w-full border border-blue-400 bg-blue-50 rounded-lg px-3 py-2 text-sm font-bold text-slate-700"
-								/>
+							<div className="col-span-2 flex">
+								<div>
+									<label className="block text-xs font-bold text-slate-700 mb-1">Total Amount</label>
+									<input
+										type="number"
+										step="0.01"
+										value={calculatedTotal || ""}
+										readOnly
+										className="w-full border border-blue-500 rounded-lg px-3 py-2 text-sm font-bold text-slate-700"
+									/>
+								</div>
+								<p className="text-xs text-slate-500 mt-10 ml-2">auto-calculated</p>
 							</div>
+
 						</div>
 					</section>
 
 					{/* Line Items */}
 					<section>
+
 						<div className="flex items-center justify-between mb-4">
-							<h3 className="text-sm font-semibold text-slate-900">Line Items (Optional)</h3>
+							<h3 className="text-sm font-semibold text-slate-900">Items</h3>
 							<button
 								type="button"
 								onClick={addItem}
@@ -258,8 +310,9 @@ export default function ManualEntry() {
 								{draft.items.map((item, idx) => (
 									<div key={idx} className="border border-slate-200 rounded-lg p-4 bg-slate-50/50">
 										<div className="grid grid-cols-1 md:grid-cols-12 gap-3">
+
 											<div className="md:col-span-6">
-												<label className="block text-xs font-medium text-slate-500 mb-1">Item Name</label>
+												<label className="block text-xs font-medium text-slate-500 mb-1">Item Name *</label>
 												<input
 													type="text"
 													required
@@ -268,8 +321,9 @@ export default function ManualEntry() {
 													className="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm"
 												/>
 											</div>
+
 											<div className="md:col-span-3 col-span-1/2">
-												<label className="block text-xs font-medium text-slate-500 mb-1">Qty</label>
+												<label className="block text-xs font-medium text-slate-500 mb-1">Qty *</label>
 												<input
 													type="number"
 													required
@@ -279,8 +333,9 @@ export default function ManualEntry() {
 													className="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm"
 												/>
 											</div>
+
 											<div className="md:col-span-3 col-span-1/2">
-												<label className="block text-xs font-medium text-slate-500 mb-1">Price</label>
+												<label className="block text-xs font-medium text-slate-500 mb-1">Price *</label>
 												<input
 													type="number"
 													required
@@ -290,6 +345,7 @@ export default function ManualEntry() {
 													className="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm"
 												/>
 											</div>
+
 											<div className="md:col-span-12">
 												<button
 													type="button"
@@ -299,6 +355,7 @@ export default function ManualEntry() {
 													Remove Line Item
 												</button>
 											</div>
+
 										</div>
 									</div>
 								))}
