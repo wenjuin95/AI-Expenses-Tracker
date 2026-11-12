@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
-import type { Receipt } from "../types/expenses";
-import { EXPENSE_CATEGORY_COLORS, UNCATEGORIZED_COLOR } from "../types/expenses";
+import { EXPENSE_CATEGORY_COLORS, UNCATEGORIZED_COLOR, MAX_STORAGE, type Receipt } from "../types/expenses";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash, faReceipt, faChevronDown, faDownload } from "@fortawesome/free-solid-svg-icons";
 import { get } from 'idb-keyval';
@@ -52,12 +51,11 @@ export default function ExpenseOverview({ theme }: ExpenseOverviewProps) {
 			const sizeInBytes = new Blob([jsonString]).size;
 			const usageInMB = (sizeInBytes / (1024 * 1024)).toFixed(5);
 
-			const { quota } = await navigator.storage.estimate();
-			const quotaInMB = quota ? (quota / (1024 * 1024)).toFixed(2) : null;
+			// const { quota } = await navigator.storage.estimate();
+			// const quotaInMB = quota ? (quota / (1024 * 1024)).toFixed(2) : null;
+			const quotaInMB = MAX_STORAGE;
 			setUsage(usageInMB ? parseFloat(usageInMB) : null);
 			setQuota(quotaInMB ? parseFloat(quotaInMB) : null);
-			console.log(`Storage usage: ${usageInMB} MB`);
-			console.log(`Storage quota: ${quotaInMB} MB`);
 
 		} catch (err) {
 			console.error("Failed to estimate storage usage:", err);
@@ -220,6 +218,31 @@ return (
 					<FontAwesomeIcon icon={faReceipt} className="h-12 w-12 text-slate-300 mb-4" />
 					<h3 className="text-lg font-medium text-slate-900">No expenses yet</h3>
 					<p className="text-slate-500 mt-1">Upload and scan a receipt to get started.</p>
+
+					<div className="mt-4 w-full rounded-lg bg-white">
+						<div className="flex items-center justify-between text-xs font-medium text-slate-600">
+							<span>Storage usage</span>
+							<span>{usagePercentage !== null ? `${usagePercentage.toFixed(1)}%` : "Loading..."}</span>
+						</div>
+						<div
+							className="mt-1.5 h-2 overflow-hidden rounded-full bg-slate-200"
+							role="progressbar"
+							aria-label="Storage usage"
+							aria-valuemin={0}
+							aria-valuemax={100}
+							aria-valuenow={usagePercentage ?? 0}
+						>
+							<div
+								className="h-full rounded-full bg-blue-500 transition-all"
+								style={{ width: `${usagePercentage ?? 0}%` }}
+							/>
+						</div>
+						<p className="mt-1 text-right text-xs text-slate-500">
+							{usage !== null && quota !== null
+								? `${formatStorageSize(usage)} / ${formatStorageSize(quota)}`
+								: "Loading storage details..."}
+						</p>
+					</div>
 				</div>
 			) : (
 				<>

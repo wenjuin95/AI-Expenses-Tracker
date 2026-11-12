@@ -1,6 +1,6 @@
 import { GoogleGenAI } from '@google/genai';
 import { get, set } from 'idb-keyval';
-import { receiptSchema, type Receipt } from '../types/expenses';
+import { receiptSchema, MAX_STORAGE, type Receipt } from '../types/expenses';
 import { getErrorMessage, getErrorStatus } from '../types/errors';
 
 const STORAGE_KEY = "expenses_data";
@@ -90,21 +90,22 @@ export async function parseReceipts(files: File[]): Promise<Array<{
 // Save a new expense to IndexedDB
 export async function saveExpense(expense: Receipt): Promise<void> {
 	try {
-		// 1. Fetch existing expenses from IndexedDB (returns undefined if empty)
 		const existingData = await get<Receipt[]>(STORAGE_KEY);
 		const expenses = existingData || [];
+		const expensesSizeInMB = new Blob([JSON.stringify(expenses)]).size / (1024 * 1024);
 
-		// 2. Create a new record with a unique ID and timestamp
+		if (expensesSizeInMB >= parseFloat(MAX_STORAGE)) {
+			throw new Error("Storage limit exceeded. Cannot save more receipts.");
+		}
+
 		const newRecord = {
 			...expense,
 			id: crypto.randomUUID(),
 			createdAt: new Date().toISOString()
 		};
 
-		// 3. Add the new record to the array
 		expenses.push(newRecord);
 
-		// 4. Save the updated array back to IndexedDB
 		await set(STORAGE_KEY, expenses);
 
 	} catch (error) {

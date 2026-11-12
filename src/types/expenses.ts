@@ -82,3 +82,5 @@ export const receiptSchema = {
   },
   required: ["merchant_name", "total_amount", "currency", "items"]
 };
+
+export const MAX_STORAGE = "1024.00"
