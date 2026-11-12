@@ -1,9 +1,12 @@
 import { useState, useEffect } from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTrash, faReceipt, faChevronDown, faDownload } from "@fortawesome/free-solid-svg-icons";
-import { getSavedExpenses, deleteExpense } from "../api/expenseApi";
 import type { Receipt } from "../types/expenses";
 import { EXPENSE_CATEGORY_COLORS, UNCATEGORIZED_COLOR } from "../types/expenses";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTrash, faReceipt, faChevronDown, faDownload } from "@fortawesome/free-solid-svg-icons";
+import { get } from 'idb-keyval';
+
+import { getSavedExpenses, deleteExpense } from "../api/expenseApi";
+
 import ExpenseChart from "../components/Chart";
 import { exportCsv } from "../components/ExportFile";
 import Popup from "../components/Popup";
@@ -11,6 +14,18 @@ import Popup from "../components/Popup";
 interface ExpenseOverviewProps {
 	theme: "light" | "dark";
 }
+
+const formatStorageSize = (sizeInMB: number) => {
+	if (sizeInMB < 1) {
+		return `${(sizeInMB * 1024).toFixed(2)} KB`;
+	}
+
+	if (sizeInMB >= 1024) {
+		return `${(sizeInMB / 1024).toFixed(2)} GB`;
+	}
+
+	return `${sizeInMB.toFixed(2)} MB`;
+};
 
 export default function ExpenseOverview({ theme }: ExpenseOverviewProps) {
 	const [expenses, setExpenses] = useState<Receipt[]>([]);
@@ -22,10 +37,32 @@ export default function ExpenseOverview({ theme }: ExpenseOverviewProps) {
 	const [exportLoading, setExportLoading] = useState(false);
 	const [exportCountdown, setExportCountdown] = useState(0);
 	const [exportError, setExportError] = useState<string | null>(null);
+	const [usage, setUsage] = useState<number | null>(null);
+	const [quota, setQuota] = useState<number | null>(null);
 
 	useEffect(() => {
 		loadExpenses();
+		showUsage();
 	}, []);
+
+	const showUsage = async () => {
+		try {
+			const expensesUsage = await get("expenses_data");
+			const jsonString = JSON.stringify(expensesUsage);
+			const sizeInBytes = new Blob([jsonString]).size;
+			const usageInMB = (sizeInBytes / (1024 * 1024)).toFixed(5);
+
+			const { quota } = await navigator.storage.estimate();
+			const quotaInMB = quota ? (quota / (1024 * 1024)).toFixed(2) : null;
+			setUsage(usageInMB ? parseFloat(usageInMB) : null);
+			setQuota(quotaInMB ? parseFloat(quotaInMB) : null);
+			console.log(`Storage usage: ${usageInMB} MB`);
+			console.log(`Storage quota: ${quotaInMB} MB`);
+
+		} catch (err) {
+			console.error("Failed to estimate storage usage:", err);
+		}
+	}
 
 	const loadExpenses = async () => {
 		try {
@@ -92,6 +129,11 @@ export default function ExpenseOverview({ theme }: ExpenseOverviewProps) {
 			setExportLoading(false);
 		}
 	};
+
+	const usagePercentage =
+		usage !== null && quota !== null && quota > 0
+			? Math.min((usage / quota) * 100, 100)
+			: null;
 
 	if (loading) {
 		return (
@@ -160,6 +202,7 @@ return (
 					<FontAwesomeIcon icon={faReceipt} className="mr-2" />
 					Overview
 				</h1>
+
 				<div>
 					<button
 						onClick={handleExport}
@@ -180,8 +223,34 @@ return (
 				</div>
 			) : (
 				<>
-					<ExpenseChart expenses={expenses} theme={theme} />
+					<div className="border border-slate-200 rounded-xl p-6 bg-white shadow-sm">
+						<ExpenseChart expenses={expenses} theme={theme} />
 
+						<div className="w-full rounded-lg bg-white">
+							<div className="flex items-center justify-between text-xs font-medium text-slate-600">
+								<span>Storage usage</span>
+								<span>{usagePercentage !== null ? `${usagePercentage.toFixed(1)}%` : "Loading..."}</span>
+							</div>
+							<div
+								className="mt-1.5 h-2 overflow-hidden rounded-full bg-slate-200"
+								role="progressbar"
+								aria-label="Storage usage"
+								aria-valuemin={0}
+								aria-valuemax={100}
+								aria-valuenow={usagePercentage ?? 0}
+							>
+								<div
+									className="h-full rounded-full bg-blue-500 transition-all"
+									style={{ width: `${usagePercentage ?? 0}%` }}
+								/>
+							</div>
+							<p className="mt-1 text-right text-xs text-slate-500">
+								{usage !== null && quota !== null
+									? `${formatStorageSize(usage)} / ${formatStorageSize(quota)}`
+									: "Loading storage details..."}
+							</p>
+						</div>
+					</div>
 
 					<div>
 						{expenses.map((expense) => (

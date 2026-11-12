@@ -65,7 +65,7 @@ export default function ExpenseChart({ expenses, theme }: ExpenseChartProps) {
     const totalSpent = chartData.datasets[0].data.reduce((a, b) => a + b, 0);
 
     return (
-        <div className="bg-white border border-slate-200 rounded-xl p-6 shadow-sm flex flex-col md:flex-row items-center gap-8">
+        <div className="bg-white p-6 flex flex-col md:flex-row items-center gap-8">
             <div className="w-full md:w-1/2 max-w-62.5">
                 <Doughnut
                     data={chartData}
