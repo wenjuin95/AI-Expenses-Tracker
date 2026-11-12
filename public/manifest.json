@@ -3,7 +3,7 @@
   "short_name": "Expense",
   "description": "Track and manage your daily expenses.",
   "start_url": "/AI-Expenses-Tracker/",
-  "scope": "/",
+  "scope": "/AI-Expenses-Tracker/",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#000000",
