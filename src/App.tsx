@@ -28,19 +28,19 @@ function App() {
 		document.documentElement.dataset.theme = theme;
 		localStorage.setItem("expense-tracker-theme", theme);
 
-		const preventZoom = (e:any) => {
+		const preventZoom = (e: any) => {
 			if (e.ctrlKey) {
 				e.preventDefault();
 			}
 		};
 
-		const preventPinch = (e) => {
+		const preventPinch = (e: any) => {
 			if (e.touches.length > 1) {
 				e.preventDefault();
 			}
 		};
 
-		const preventKeyboardZoom = (e:any) => {
+		const preventKeyboardZoom = (e: any) => {
 			if (
 				(e.ctrlKey || e.metaKey) &&
 				["+", "-", "=", "0"].includes(e.key)
