@@ -168,6 +168,7 @@ export default function ManualEntry() {
 									className="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
 									placeholder="e.g. Starbucks"
 								/>
+								<p className="text-xs text-slate-300">Default name will be used if left blank</p>
 							</div>
 
 							<div>
@@ -234,7 +235,7 @@ export default function ManualEntry() {
 						<h3 className="text-sm font-semibold text-slate-900 mb-4">
 							Financials
 						</h3>
-						<div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+						<div className="md:grid md:grid-cols-4 gap-4 space-y-4 md:space-y-0">
 
 							<div>
 								<label className="block text-xs font-medium text-slate-500 mb-1"> Currency * </label>
@@ -245,7 +246,7 @@ export default function ManualEntry() {
 										onChange={(e) => updateField("currency", e.target.value)}
 										className="w-full appearance-none border border-slate-300 rounded-lg px-4 py-2 text-sm text-slate-700 bg-white hover:border-slate-400 focus:outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 transition-all duration-200 cursor-pointer"
 									>
-										<option value="" disabled>Select a currency</option>
+										<option value="" disabled>Select currency</option>
 										<option value="RM">RM</option>
 										<option value="SGD">SGD</option>
 										<option value="CNY">CNY</option>
@@ -286,7 +287,7 @@ export default function ManualEntry() {
 								/>
 							</div>
 
-							<div className="col-span-2 flex">
+							<div className="col-span-2 md:flex">
 								<div>
 									<label className="block text-xs font-bold text-slate-700 mb-1">Total Amount</label>
 									<input
@@ -297,7 +298,7 @@ export default function ManualEntry() {
 										className="w-full border border-blue-500 rounded-lg px-3 py-2 text-sm font-bold text-slate-700"
 									/>
 								</div>
-								<p className="text-xs text-slate-500 mt-10 ml-2">auto-calculated</p>
+								<p className="text-xs text-slate-300 md:mt-10 md:ml-2">Auto-calculated</p>
 							</div>
 
 						</div>

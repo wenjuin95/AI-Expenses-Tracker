@@ -257,7 +257,7 @@ export default function ReviewReceipt({
 						<h3 className="text-sm font-semibold text-slate-900 mb-4">
 							Financials
 						</h3>
-						<div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+						<div className="md:grid md:grid-cols-4 gap-4 space-y-4 md:space-y-0">
 
 							<div>
 								<label className="block text-xs font-medium text-slate-500 mb-1"> Currency * </label>
@@ -309,7 +309,7 @@ export default function ReviewReceipt({
 								/>
 							</div>
 
-							<div className="col-span-2 flex">
+							<div className="col-span-2 md:flex">
 								<div>
 									<label className="block text-xs font-bold text-slate-700 mb-1">Total Amount</label>
 									<input
@@ -320,7 +320,7 @@ export default function ReviewReceipt({
 										className="w-full border border-blue-500 rounded-lg px-3 py-2 text-sm font-bold text-slate-700"
 									/>
 								</div>
-								<p className="text-xs text-slate-500 mt-10 ml-2">auto-calculated</p>
+								<p className="text-xs text-slate-500 md:mt-10 md:ml-2">auto-calculated</p>
 							</div>
 						</div>
 					</section>
