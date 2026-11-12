@@ -214,7 +214,7 @@ return (
 			</div>
 
 			{expenses.length === 0 ? (
-				<div className="bg-white border border-slate-200 rounded-xl p-12 text-center shadow-sm">
+				<div className="bg-white border border-slate-200 rounded-xl p-6 md:p-12 text-center shadow-sm">
 					<FontAwesomeIcon icon={faReceipt} className="h-12 w-12 text-slate-300 mb-4" />
 					<h3 className="text-lg font-medium text-slate-900">No expenses yet</h3>
 					<p className="text-slate-500 mt-1">Upload and scan a receipt to get started.</p>
