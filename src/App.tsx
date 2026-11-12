@@ -34,6 +34,12 @@ function App() {
 			}
 		};
 
+		const preventPinch = (e) => {
+			if (e.touches.length > 1) {
+				e.preventDefault();
+			}
+		};
+
 		const preventKeyboardZoom = (e:any) => {
 			if (
 				(e.ctrlKey || e.metaKey) &&
@@ -44,13 +50,18 @@ function App() {
 		};
 
 		window.addEventListener("wheel", preventZoom, {
-		  passive: false
+		passive: false
+		});
+
+		window.addEventListener("touchmove", preventPinch, {
+			passive: false
 		});
 
 		window.addEventListener("keydown", preventKeyboardZoom);
 
 		return () => {
 			window.removeEventListener("wheel", preventZoom);
+			window.removeEventListener("touchmove", preventPinch);
 			window.removeEventListener("keydown", preventKeyboardZoom);
 		};
 	}, [theme]);
