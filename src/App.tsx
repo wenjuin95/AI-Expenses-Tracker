@@ -27,6 +27,32 @@ function App() {
 	useEffect(() => {
 		document.documentElement.dataset.theme = theme;
 		localStorage.setItem("expense-tracker-theme", theme);
+
+		const preventZoom = (e:any) => {
+			if (e.ctrlKey) {
+				e.preventDefault();
+			}
+		};
+
+		const preventKeyboardZoom = (e:any) => {
+			if (
+				(e.ctrlKey || e.metaKey) &&
+				["+", "-", "=", "0"].includes(e.key)
+			) {
+				e.preventDefault();
+			}
+		};
+
+		window.addEventListener("wheel", preventZoom, {
+		  passive: false
+		});
+
+		window.addEventListener("keydown", preventKeyboardZoom);
+
+		return () => {
+			window.removeEventListener("wheel", preventZoom);
+			window.removeEventListener("keydown", preventKeyboardZoom);
+		};
 	}, [theme]);
 
 	const toggleTheme = () => {
