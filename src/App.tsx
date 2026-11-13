@@ -10,6 +10,7 @@ import ExpenseOverview from './pages/Overview'
 import ManualEntry from "./pages/ManualEntry";
 import Footer from './pages/Footer'
 import Feedback from './components/Feedback'
+import InstallPWAButton from './components/Download'
 
 function App() {
 	const [activeView, setActiveView] = useState<'menu' | 'scan' | 'manual'>('menu');
@@ -78,11 +79,11 @@ return (
 				<Popup
 					open={isOpen}
 					type="info"
-					title="Welcome to Expense Tracker"
-					message="Check out our new AI-powered receipt scanning feature! Give it a try!"
+					title="New Version Available"
+					message="This is a new version of the app with improved features and performance. Please explore the new functionalities and provide feedback. you can also install the app on your device for a better experience."
 					onOk={() => setIsOpen(false)}
 					showDontShowAgain={true}
-					storageKey="dashboard-update-popup-v1"
+					storageKey="dashboard-update-popup-v2"
 				/>
 
 				{/* feedback form*/}
@@ -107,9 +108,11 @@ return (
 				{/* Tittle and Theme Switcher Section */}
 				<img src={logo} alt="Expense Tracker Logo" className="h-25 w-30 lg:h-45 lg:w-50" />
 				<div className="relative">
+
 					<h1 className="whitespace-nowrap font-extrabold text-4xl pl-2 text-slate-900 sm:text-4xl lg:text-7xl lg:pl-4">
 						Expense<br />Tracker
 					</h1>
+
 					<button
 						type="button"
 						onClick={toggleTheme}
@@ -130,10 +133,14 @@ return (
 							<FontAwesomeIcon
 								icon={theme === "light" ? faSun : faMoon}
 								className={theme === "light" ? "text-amber-500" : "text-blue-500"}
-							/>
+								/>
 						</span>
 					</button>
 				</div>
+			</div>
+
+			<div className="flex justify-center">
+				<InstallPWAButton />
 			</div>
 
 			<div className="p-5">
