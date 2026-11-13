@@ -1,6 +1,6 @@
 {
   "name": "Expense Tracker",
-  "short_name": "Expense",
+  "short_name": "Expense Tracker",
   "description": "Track and manage your daily expenses.",
   "start_url": "/AI-Expenses-Tracker/",
   "scope": "/AI-Expenses-Tracker/",
