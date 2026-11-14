@@ -240,7 +240,7 @@ export default function ReviewReceipt({
 									>
 										<option value="" disabled>Select a payment method</option>
 										<option value="Credit Card">Credit Card</option>
-										<option value="TNG">TNG</option>
+										<option value="E-Wallet">E-Wallet</option>
 										<option value="Cash">Cash</option>
 									</select>
 
