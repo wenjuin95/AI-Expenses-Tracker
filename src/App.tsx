@@ -80,7 +80,7 @@ return (
 					open={isOpen}
 					type="info"
 					title="New Version Available"
-					message="This is a new version of the app with improved features and performance. Please explore the new functionalities and provide feedback. you can also install the app on your device for a better experience."
+					message="This is a new version of the app with improved features and performance. Please explore the new functionalities and provide feedback. You can also install the app on your device for a better experience."
 					onOk={() => setIsOpen(false)}
 					showDontShowAgain={true}
 					storageKey="dashboard-update-popup-v2"
