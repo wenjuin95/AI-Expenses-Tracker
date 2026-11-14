@@ -26,7 +26,7 @@ function App() {
 		return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
 	});
 	const [isOpen, setIsOpen] = useState<boolean>(() => {
-		const dontShowAgain = localStorage.getItem("dashboard-update-popup-v1");
+		const dontShowAgain = localStorage.getItem("dashboard-update-popup-v3");
 		return dontShowAgain !== "true"; // Show the popup if not set to "true"
 	});
 
@@ -101,11 +101,11 @@ return (
 				<Popup
 					open={isOpen}
 					type="info"
-					title="New Version Available"
-					message="This is a new version of the app with improved features and performance. Please explore the new functionalities and provide feedback. You can also install the app on your device for a better experience."
+					title="New Features Available!"
+					message="We've added new features to enhance your experience. Check out the 'Split Bill' feature and improved receipt scanning!"
 					onOk={() => setIsOpen(false)}
 					showDontShowAgain={true}
-					storageKey="dashboard-update-popup-v2"
+					storageKey="dashboard-update-popup-v3"
 				/>
 
 				{/* feedback form*/}
