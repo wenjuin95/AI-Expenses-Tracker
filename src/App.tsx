@@ -4,15 +4,19 @@ import { faCamera, faKeyboard, faArrowLeft, faMoon, faSun, faCommentDots } from 
 import logo from './assets/expense-tracker-logo.png'
 import './App.css'
 
-import Popup from './components/Popup'
 import ReceiptScanner from './pages/ReceiptScanner'
 import ExpenseOverview from './pages/Overview'
 import ManualEntry from "./pages/ManualEntry";
-import Footer from './pages/Footer'
-import Feedback from './components/Feedback'
-import InstallPWAButton from './components/Download'
+import Footer from './pages/Footer';
+
+import OfflinePage from './pages/OfflinePage';
+import Popup from './components/Popup';
+import Feedback from './components/Feedback';
+import InstallPWAButton from './components/Download';
+
 
 function App() {
+	const [isOnline, setIsOnline] = useState(() => navigator.onLine);
 	const [activeView, setActiveView] = useState<'menu' | 'scan' | 'manual'>('menu');
 	const [isFeedbackOpen, setIsFeedbackOpen] = useState(false);
 	const [theme, setTheme] = useState<"light" | "dark">(() => {
@@ -67,9 +71,26 @@ function App() {
 		};
 	}, [theme]);
 
+	useEffect(() => {
+		const handleOnline = () => setIsOnline(true);
+		const handleOffline = () => setIsOnline(false);
+
+		window.addEventListener("online", handleOnline);
+		window.addEventListener("offline", handleOffline);
+
+		return () => {
+			window.removeEventListener("online", handleOnline);
+			window.removeEventListener("offline", handleOffline);
+		};
+	}, []);
+
 	const toggleTheme = () => {
 		setTheme((currentTheme) => currentTheme === "light" ? "dark" : "light");
 	};
+
+	if (!isOnline) {
+		return <OfflinePage />;
+	}
 
 return (
 		<div className="max-w-4xl mx-auto space-y-8 p-4 md:p-6">
