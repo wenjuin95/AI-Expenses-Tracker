@@ -106,9 +106,9 @@ npm run dev
 ---
 
 ## Future Improvements
-- Convert the application into a Progressive Web App (PWA) for native mobile installation and offline caching.
-- Allow conversational inputs (e.g., typing "spent 15 on milk tea today") that the LLM will automatically categorize and format into a draft record.
-- AI assistant to help you split bill with tax calculation
+- [ ] Convert the application into a Progressive Web App (PWA) for native mobile installation and offline caching.
+- [ ] Allow conversational inputs (e.g., typing "spent 15 on milk tea today") that the LLM will automatically categorize and format into a draft record.
+- [ ] AI assistant to help you split bill with tax calculation
 
 ---
 
