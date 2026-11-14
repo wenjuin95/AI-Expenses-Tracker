@@ -1,12 +1,13 @@
 import { useEffect, useState } from 'react'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCamera, faKeyboard, faArrowLeft, faMoon, faSun, faCommentDots } from "@fortawesome/free-solid-svg-icons";
+import { faCamera, faKeyboard, faArrowLeft, faMoon, faSun, faCommentDots, faUsersBetweenLines } from "@fortawesome/free-solid-svg-icons";
 import logo from './assets/expense-tracker-logo.png'
 import './App.css'
 
 import ReceiptScanner from './pages/ReceiptScanner'
-import ExpenseOverview from './pages/Overview'
 import ManualEntry from "./pages/ManualEntry";
+import SplitBill from './pages/SplitBill';
+import ExpenseOverview from './pages/Overview'
 import Footer from './pages/Footer';
 
 import OfflinePage from './pages/OfflinePage';
@@ -17,7 +18,7 @@ import InstallPWAButton from './components/Download';
 
 function App() {
 	const [isOnline, setIsOnline] = useState(() => navigator.onLine);
-	const [activeView, setActiveView] = useState<'menu' | 'scan' | 'manual'>('menu');
+	const [activeView, setActiveView] = useState<'menu' | 'scan' | 'manual' | 'split'>('menu');
 	const [isFeedbackOpen, setIsFeedbackOpen] = useState(false);
 	const [theme, setTheme] = useState<"light" | "dark">(() => {
 		const savedTheme = localStorage.getItem("expense-tracker-theme");
@@ -184,7 +185,7 @@ return (
 				<div className="flex-1">
 					{/* Choose Menu */}
 					{activeView === 'menu' && (
-						<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+						<div className="grid grid-cols-1 md:grid-cols-3 gap-4">
 
 
 							{/* AI Scan */}
@@ -214,6 +215,19 @@ return (
 									Type in the expense details yourself without using a receipt.
 								</p>
 							</button>
+
+							<button
+								onClick={() => setActiveView('split')}
+								className="flex flex-col items-center justify-center p-8 pt-2 bg-white border-2 border-slate-200 rounded-xl hover:border-blue-500 hover:bg-blue-500 transition-all text-center group shadow-sm"
+							>
+								<div className="w-16 h-16 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+									<FontAwesomeIcon icon={faUsersBetweenLines} className="text-2xl" />
+								</div>
+								<h3 className="text-lg font-bold text-slate-900 mb-1">Split Bill</h3>
+								<p className="text-sm text-slate-500">
+									Split the cost for yourself and your friends.
+								</p>
+							</button>
 						</div>
 					)}
 
@@ -228,6 +242,13 @@ return (
 					{activeView === 'manual' && (
 						<div className="animate-in fade-in slide-in-from-bottom-4 duration-300">
 							<ManualEntry />
+						</div>
+					)}
+
+					{/* Split Bill Component */}
+					{activeView === 'split' && (
+						<div className="animate-in fade-in slide-in-from-bottom-4 duration-300">
+							<SplitBill />
 						</div>
 					)}
 				</div>

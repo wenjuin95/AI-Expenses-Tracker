@@ -11,9 +11,11 @@ import BatchReviewPage from "./BatchReviewPage";
 
 interface ReceiptScannerProps {
 	onReviewComplete: () => void;
+	onReceiptScanned?: (receipt: Receipt) => void;
+	children?: React.ReactNode;
 }
 
-export default function ReceiptScanner({ onReviewComplete }: ReceiptScannerProps) {
+export default function ReceiptScanner({ onReviewComplete, onReceiptScanned, children }: ReceiptScannerProps) {
 	const [apiKey, setApiKey] = useState("");
 	const [isApiKeySaved, setIsApiKeySaved] = useState(false);
 	const [showDeleteApiKeyPopup, setShowDeleteApiKeyPopup] = useState(false);
@@ -74,11 +76,16 @@ export default function ReceiptScanner({ onReviewComplete }: ReceiptScannerProps
 		try {
 			const data = await parseReceipts(selectedFile);
 			console.log("Parsed Receipts:", data);
-			setResult(
-				data
-					.map(({ receipt }) => receipt)
-					.filter((receipt): receipt is Receipt => receipt !== null),
-			);
+			const receipts = data
+				.map(({ receipt }) => receipt)
+				.filter((receipt): receipt is Receipt => receipt !== null);
+
+			if (onReceiptScanned && receipts[0]) {
+				onReceiptScanned(receipts[0]);
+				return;
+			}
+
+			setResult(receipts);
 		} catch (err) {
 			const ErrorMessage = getErrorMessage(err);
 			if (ErrorMessage.toLocaleLowerCase().includes("api key")) {
@@ -308,6 +315,8 @@ return (
 						"Process Receipt"
 					)}
 				</button>
+
+				{children}
 			</div>
 		</div>
 	);

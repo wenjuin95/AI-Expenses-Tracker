@@ -26,7 +26,7 @@ export default function ManualEntry() {
 		items: [{ name: "", quantity: 0, price: 0 }],
 	});
 
-	const calculatedSubtotal = draft.items.reduce((sum, item) => sum + item.quantity * item.price, 0);
+	const calculatedSubtotal = draft.items.reduce((sum, item) => sum +  item.price, 0);
 	const calculatedTotal = calculatedSubtotal + (draft.tax || 0) - (draft.discount || 0);
 
 	useEffect(() => {
@@ -135,7 +135,6 @@ export default function ManualEntry() {
 				title="Saved Successfully"
 				message="Your expense has been saved successfully."
 				onOk={() => window.location.reload()}
-				showOkButton={false}
 			/>
 
 			<Popup

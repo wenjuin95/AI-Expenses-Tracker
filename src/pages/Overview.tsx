@@ -191,7 +191,10 @@ return (
 				type="success"
 				title="Receipt Deleted"
 				message="The receipt has been successfully deleted."
-				onOk={() => setDeleteSuccess(null)}
+				onOk={() => {
+					setDeleteSuccess(null);
+					window.location.reload();
+				}}
 			/>
 		)}
 
