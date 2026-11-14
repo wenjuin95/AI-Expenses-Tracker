@@ -69,18 +69,18 @@ export default function InstallPWAButton() {
 		{/* iOS Instructions Modal */}
 		{showIOSInstructions && (
 			<div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-				<div className="bg-white dark:bg-gray-800 rounded-xl p-6 max-w-sm w-full shadow-lg">
-					<h3 className="text-lg font-bold text-gray-900 dark:text-white mb-2">Install on iPhone</h3>
-					<p className="text-gray-600 dark:text-gray-300 mb-4">
+				<div className="bg-gray-100 rounded-xl p-6 max-w-sm w-full shadow-lg">
+					<h3 className="text-lg font-bold text-slate-900 mb-2">Install on iPhone</h3>
+					<p className="text-slate-500 mb-4">
 						Apple does not allow web apps to install automatically. To install:
 					</p>
-					<ol className="list-decimal pl-5 text-gray-600 dark:text-gray-300 space-y-2 mb-6">
+					<ol className="list-decimal pl-5 text-slate-500 space-y-2 mb-6">
 						<li>Tap the <strong>Share</strong> button at the bottom of Safari (the square with an arrow pointing up).</li>
 						<li>Scroll down and tap <strong>Add to Home Screen</strong>.</li>
 					</ol>
 					<button
 						onClick={() => setShowIOSInstructions(false)}
-						className="w-full py-2 bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-white rounded-lg font-medium hover:bg-gray-300 dark:hover:bg-gray-600"
+						className="w-full py-2 bg-blue-500 text-white rounded-lg font-medium hover:bg-blue-700"
 					>
 						Got it
 					</button>

@@ -31,6 +31,7 @@ https://github.com/user-attachments/assets/ec42a440-2bb9-42d7-bec9-dfcec17a75ed
 * **Zero Backend:** Fully client-side architecture with zero reliance on cloud databases.
 * **Local Privacy:** All financial records are stored securely in the browser's IndexedDB.
 * **CSV Export:** Download your recorded expenses into a universal CSV format, making it easy to open and manage in Excel, Google Sheets, or Numbers.
+* **Progressive Web App:** Install Expense Tracker on supported mobile and desktop browsers without downloading it from an app store. No service worker is required or included.
 
 ---
 
@@ -102,6 +103,32 @@ npm run dev
 ```
 
 4. Open http://localhost:5173 in your browser and enter your Gemini API key in the UI settings.
+
+---
+
+## Installing the PWA
+
+Expense Tracker includes a web app manifest and can be installed from a supported browser. Installation does not use a service worker, so the app still needs an internet connection to load and use its online features.
+
+### iOS and iPadOS
+1. Open the app in Safari.
+2. Tap **Share**.
+3. Choose **Add to Home Screen**, then tap **Add**.
+
+### Android
+1. Open the app in Chrome.
+2. Open the browser menu.
+3. Choose **Install app** or **Add to Home screen**, then confirm.
+
+### Windows and Linux desktop
+1. Open the app in Chrome or Edge.
+2. Select the install icon in the address bar, or open the browser menu.
+3. Choose **Install Expense Tracker**, then confirm.
+
+### macOS
+1. In Safari, open the **Share** menu and choose **Add to Dock**.
+2. Alternatively, open the app in Chrome or Edge and use the install icon in the address bar.
+3. Confirm the installation.
 
 ---
 
