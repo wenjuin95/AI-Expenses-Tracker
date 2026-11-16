@@ -1,35 +1,26 @@
 import { useEffect, useMemo, useState } from "react";
-import { get, set } from "idb-keyval";
 
 import { getSavedExpenses } from "../api/expenseApi";
 import ReceiptScanner from "./ReceiptScanner";
 
-import { SPLIT_SESSIONS_KEY } from "../types/expenses";
 import type {
 	Receipt,
 	ReceiptItem,
 	SplitItem, SplitStep,
-	SplitRecord,
-	SplitSession
+	SplitRecord
 } from "../types/expenses";
 
 const toSplitItems = (items: ReceiptItem[]): SplitItem[] =>
 	items.map((item, index) => ({ ...item, lineId: `line-${index}` }));
 
-export const clearSplitSessions = async () => {
-	await set(SPLIT_SESSIONS_KEY, []);
-};
-
 export default function SplitBill({ receiptId }: { receiptId?: string }) {
 	const [expenses, setExpenses] = useState<Receipt[]>([]);
 	const [receipt, setReceipt] = useState<Receipt | null>(null);
-	const [sourceId, setSourceId] = useState<string | null>(null);
 	const [remainingItems, setRemainingItems] = useState<SplitItem[]>([]);
 	const [splits, setSplits] = useState<SplitRecord[]>([]);
 	const [mySelections, setMySelections] = useState<Record<string, number>>({});
 	const [step, setStep] = useState<SplitStep>("choose");
 	const [loading, setLoading] = useState(true);
-	const [loadingSession, setLoadingSession] = useState(false);
 	const [storageError, setStorageError] = useState<string | null>(null);
 
 	useEffect(() => {
@@ -47,7 +38,7 @@ export default function SplitBill({ receiptId }: { receiptId?: string }) {
 
 		const savedReceipt = expenses.find((expense) => expense.id === receiptId);
 		if (savedReceipt) {
-			void selectReceipt(savedReceipt);
+			selectReceipt(savedReceipt);
 		}
 	}, [expenses, receiptId]);
 
@@ -59,43 +50,12 @@ export default function SplitBill({ receiptId }: { receiptId?: string }) {
 		setMySelections(selections);
 	}, [remainingItems]);
 
-	const persistSession = async (
-		sourceId: string,
-		nextRemainingItems: SplitItem[],
-		nextSplits: SplitRecord[],
-	) => {
-		const sessions = (await get<SplitSession[]>(SPLIT_SESSIONS_KEY)) || [];
-		const nextSession: SplitSession = {
-			sourceId,
-			remainingItems: nextRemainingItems,
-			splits: nextSplits,
-		};
-		const updatedSessions = sessions.filter((session) => session.sourceId !== sourceId);
-		await set(SPLIT_SESSIONS_KEY, [...updatedSessions, nextSession]);
-	};
-
-	const selectReceipt = async (selectedReceipt: Receipt) => {
-		const sourceId = selectedReceipt.id || `scan-${crypto.randomUUID()}`;
+	const selectReceipt = (selectedReceipt: Receipt) => {
 		setReceipt(selectedReceipt);
-		setSourceId(sourceId);
+		setRemainingItems(toSplitItems(selectedReceipt.items));
+		setSplits([]);
 		setStorageError(null);
-		setLoadingSession(true);
-
-		try {
-			const sessions = (await get<SplitSession[]>(SPLIT_SESSIONS_KEY)) || [];
-			const existingSession = sessions.find((session) => session.sourceId === sourceId);
-			setRemainingItems(existingSession?.remainingItems || toSplitItems(selectedReceipt.items));
-			setSplits(existingSession?.splits || []);
-			setStep("split");
-		} catch (error) {
-			console.error("Failed to load split session:", error);
-			setRemainingItems(toSplitItems(selectedReceipt.items));
-			setSplits([]);
-			setStorageError("Previous split history could not be loaded.");
-			setStep("split");
-		} finally {
-			setLoadingSession(false);
-		}
+		setStep("split");
 	};
 
 	const updateSelection = (lineId: string, increment: number, maxQty: number) => {
@@ -131,8 +91,8 @@ export default function SplitBill({ receiptId }: { receiptId?: string }) {
 		[remainingItems, receipt],
 	);
 
-	const makeSplit = async () => {
-		if (!receipt || !sourceId) return;
+	const makeSplit = () => {
+		if (!receipt) return;
 
 		if (selectedTotals.subtotal <= 0) {
 			setStorageError("Select at least one item before making a split.");
@@ -172,19 +132,13 @@ export default function SplitBill({ receiptId }: { receiptId?: string }) {
 			createdAt: new Date().toISOString(),
 		};
 		const nextSplits = [...splits, nextSplit];
-		try {
-			await persistSession(sourceId, nextRemainingItems, nextSplits);
-			setRemainingItems(nextRemainingItems);
-			setSplits(nextSplits);
-			setStorageError(null);
-		} catch (error) {
-			console.error("Failed to save split:", error);
-			setStorageError("The split could not be saved.");
-		}
+		setRemainingItems(nextRemainingItems);
+		setSplits(nextSplits);
+		setStorageError(null);
 	};
 
-	const modifySplit = async (splitId: string) => {
-		if (!receipt || !sourceId) return;
+	const modifySplit = (splitId: string) => {
+		if (!receipt) return;
 
 		const splitToRestore = splits.find((split) => split.id === splitId);
 		if (!splitToRestore) return;
@@ -201,33 +155,20 @@ export default function SplitBill({ receiptId }: { receiptId?: string }) {
 		});
 
 		const nextSplits = splits.filter((split) => split.id !== splitId);
-		try {
-			await persistSession(sourceId, restoredItems, nextSplits);
-			setRemainingItems(restoredItems);
-			setSplits(nextSplits);
-			setStorageError(null);
-		} catch (error) {
-			console.error("Failed to modify split:", error);
-			setStorageError("The split could not be modified.");
-		}
+		setRemainingItems(restoredItems);
+		setSplits(nextSplits);
+		setStorageError(null);
 	};
 
-	const clearCurrentReceipt = async () => {
-		try {
-			await clearSplitSessions();
-			setReceipt(null);
-			setSourceId(null);
-			setRemainingItems([]);
-			setSplits([]);
-			setStep("choose");
-			setStorageError(null);
-		} catch (error) {
-			console.error("Failed to clear split sessions:", error);
-			setStorageError("The split history could not be cleared.");
-		}
+	const clearCurrentReceipt = () => {
+		setReceipt(null);
+		setRemainingItems([]);
+		setSplits([]);
+		setStep("choose");
+		setStorageError(null);
 	};
 
-	if (loading || loadingSession) return <div className="p-4 text-center">Loading receipts...</div>;
+	if (loading) return <div className="p-4 text-center">Loading receipts...</div>;
 
 	if (step === "choose") {
 		return (
@@ -257,7 +198,7 @@ export default function SplitBill({ receiptId }: { receiptId?: string }) {
 						defaultValue=""
 						onChange={(event) => {
 							const selectedReceipt = expenses.find((expense) => expense.id === event.target.value);
-							if (selectedReceipt) void selectReceipt(selectedReceipt);
+							if (selectedReceipt) selectReceipt(selectedReceipt);
 						}}
 						className="mt-4 w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-slate-700"
 					>
@@ -279,7 +220,7 @@ export default function SplitBill({ receiptId }: { receiptId?: string }) {
 			<div className="space-y-4">
 				<ReceiptScanner
 					onReviewComplete={() => setStep("choose")}
-					onReceiptScanned={(scannedReceipt) => void selectReceipt(scannedReceipt)}
+					onReceiptScanned={selectReceipt}
 				>
 					<button type="button" onClick={() => setStep("choose")} className="w-full rounded-lg bg-slate-200 px-4 py-2 text-sm font-medium text-slate-800 hover:bg-slate-300">
 						Back
@@ -297,7 +238,7 @@ export default function SplitBill({ receiptId }: { receiptId?: string }) {
 
 				<div className="mb-3 flex items-center justify-between gap-3">
 					<h2 className="text-sm font-bold lg:text-xl">{receipt.merchant_name}</h2>
-					<button type="button" onClick={() => void clearCurrentReceipt()} className="rounded-lg bg-slate-200 px-3 py-2 text-sm font-medium text-slate-800 hover:bg-slate-300">
+					<button type="button" onClick={clearCurrentReceipt} className="rounded-lg bg-slate-200 px-3 py-2 text-sm font-medium text-slate-800 hover:bg-slate-300">
 						Change receipt
 					</button>
 				</div>
@@ -337,7 +278,7 @@ export default function SplitBill({ receiptId }: { receiptId?: string }) {
 
 					{storageError && <p className="mb-4 px-4 text-sm text-red-600">{storageError}</p>}
 
-				<button type="button" onClick={() => void makeSplit()} disabled={remainingItems.length === 0} className="w-full rounded-lg bg-blue-600 py-3 font-medium text-white hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-50">
+				<button type="button" onClick={makeSplit} disabled={remainingItems.length === 0} className="w-full rounded-lg bg-blue-600 py-3 font-medium text-white hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-50">
 					{splits.length === 0 ? "Make split" : "Make another split"}
 				</button>
 			</div>
@@ -355,7 +296,7 @@ export default function SplitBill({ receiptId }: { receiptId?: string }) {
 									<p className="font-bold">{receipt.currency} {split.total.toFixed(2)}</p>
 								</div>
 								<p className="mt-1 text-xs text-slate-500">{split.items.map((item) => `${item.name} x${item.quantity}`).join(", ")}</p>
-								<button type="button" onClick={() => void modifySplit(split.id)} className="mt-3 rounded-lg bg-blue-600 px-3 py-2 text-sm font-medium text-white hover:bg-blue-700">
+								<button type="button" onClick={() => modifySplit(split.id)} className="mt-3 rounded-lg bg-blue-600 px-3 py-2 text-sm font-medium text-white hover:bg-blue-700">
 									Cancel this split
 								</button>
 							</div>

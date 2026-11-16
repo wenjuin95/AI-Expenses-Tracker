@@ -68,7 +68,6 @@ export default function ExpenseOverview({ theme }: ExpenseOverviewProps) {
 		try {
 			setLoading(true);
 			const data = await getSavedExpenses();
-			console.log("Fetched expenses:", data); // Debugging log
 
 			// Sort by newest first (using the createdAt timestamp)
 			const sortedData = data.sort((a, b) => {

@@ -128,8 +128,6 @@ export const UNCATEGORIZED_COLOR = "var(--app-category-uncategorized)";
 /**
  * Define the structure of a split bill session and its records
  */
-export const SPLIT_SESSIONS_KEY = "split_bill_sessions";
-
 export type SplitStep = "choose" | "saved" | "scan" | "split";
 
 export type SplitItem = ReceiptItem & {
@@ -143,12 +141,6 @@ export interface SplitRecord {
 	taxAmount: number;
 	total: number;
 	createdAt: string;
-}
-
-export interface SplitSession {
-	sourceId: string;
-	remainingItems: SplitItem[];
-	splits: SplitRecord[];
 }
 
 /**
