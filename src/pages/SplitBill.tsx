@@ -252,9 +252,9 @@ export default function SplitBill({ receiptId }: { receiptId?: string }) {
 							const myQty = mySelections[item.lineId] || 0;
 							const unitPrice = item.quantity > 0 ? item.price / item.quantity : 0;
 							return (
-								<div key={item.lineId} className="min-w-0 flex flex-col lg:flex-row justify-between border-b py-2 ">
+								<div key={item.lineId} className="flex flex-col lg:flex-row justify-between border-b py-2 ">
 									<div>
-										<p className="truncate font-mediun">{(item.name.length > 20) ? `${item.name.substring(0, 20)}...` : item.name}</p>
+										<p className="font-mediun wrap-break-word">{item.name}</p>
 										<p className="text-sm text-gray-500">{receipt.currency} {unitPrice.toFixed(2)} each <span className="text-xs">(Remaining: {item.quantity})</span></p>
 									</div>
 									<div className="flex items-center justify-center space-x-3 mt-2 lg:mt-0">
@@ -295,7 +295,18 @@ export default function SplitBill({ receiptId }: { receiptId?: string }) {
 									<p className="font-medium">Split {index + 1}</p>
 									<p className="font-bold">{receipt.currency} {split.total.toFixed(2)}</p>
 								</div>
-								<pre className="mt-1 text-xs text-slate-500">{split.items.map((item) => `${(item.name.length > 20) ? `${item.name.substring(0, 20)}...` : item.name} x${item.quantity}`).join('\n')}</pre>
+								<div className="mt-1 space-y-1 text-xs text-slate-500">
+									{split.items.map((item) => (
+										<div key={item.lineId} className="flex items-start justify-between gap-4">
+											<p className="min-w-0 flex-1 wrap-break-word">
+												{item.name}
+											</p>
+											<span className="shrink-0 font-medium">
+												x{item.quantity}
+											</span>
+										</div>
+									))}
+								</div>
 								<button type="button" onClick={() => modifySplit(split.id)} className="mt-3 rounded-lg bg-blue-600 px-3 py-2 text-sm font-medium text-white hover:bg-blue-700">
 									Cancel this split
 								</button>
