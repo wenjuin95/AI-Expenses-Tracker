@@ -236,8 +236,8 @@ export default function SplitBill({ receiptId }: { receiptId?: string }) {
 		<div className="mx-auto max-w-md space-y-6 p-4">
 			<div className="rounded-xl border bg-white p-6 shadow-sm">
 
-				<div className="mb-3 flex items-center justify-between gap-3">
-					<h2 className="text-sm font-bold lg:text-xl">{receipt.merchant_name}</h2>
+				<div className="min-w-0 mb-3 flex items-center justify-between gap-3">
+					<h2 className="truncate text-sm font-bold lg:text-xl">{receipt.merchant_name}</h2>
 					<button type="button" onClick={clearCurrentReceipt} className="rounded-lg bg-slate-200 px-3 py-2 text-sm font-medium text-slate-800 hover:bg-slate-300">
 						Change receipt
 					</button>
@@ -252,12 +252,12 @@ export default function SplitBill({ receiptId }: { receiptId?: string }) {
 							const myQty = mySelections[item.lineId] || 0;
 							const unitPrice = item.quantity > 0 ? item.price / item.quantity : 0;
 							return (
-								<div key={item.lineId} className="flex items-center justify-between border-b py-2">
+								<div key={item.lineId} className="flex flex-col lg:flex-row justify-between border-b py-2 ">
 									<div>
-										<p className="font-medium">{item.name}</p>
+										<p className="font-mediun">{item.name}</p>
 										<p className="text-sm text-gray-500">{receipt.currency} {unitPrice.toFixed(2)} each <span className="text-xs">(Remaining: {item.quantity})</span></p>
 									</div>
-									<div className="flex items-center space-x-3">
+									<div className="flex items-center justify-center space-x-3 mt-2 lg:mt-0">
 										<button type="button" onClick={() => updateSelection(item.lineId, -1, item.quantity)} className="flex h-8 w-8 items-center justify-center rounded-full text-white bg-blue-600 hover:bg-blue-700 font-bold">-</button>
 										<span className="w-4 text-center font-semibold">{myQty}</span>
 										<button type="button" onClick={() => updateSelection(item.lineId, 1, item.quantity)} className="flex h-8 w-8 items-center justify-center rounded-full text-white bg-blue-600 hover:bg-blue-700 font-bold">+</button>
@@ -272,8 +272,8 @@ export default function SplitBill({ receiptId }: { receiptId?: string }) {
 
 				<div className="mt-8 rounded-lg p-4">
 					<div className="mb-2 flex justify-between text-sm font-medium"><span>Selected subtotal:</span><span>{receipt.currency} {selectedTotals.subtotal.toFixed(2)}</span></div>
-					<div className="mb-2 flex justify-between text-sm text-gray-500"><span>Remaining amount:</span><span>{receipt.currency} {remainingTotals.total.toFixed(2)}</span></div>
-					<div className="mt-1 flex justify-between border-t pt-3 text-lg font-bold"><span>Selected total:</span><span className="text-blue-600">{receipt.currency} {selectedTotals.total.toFixed(2)}</span></div>
+					<div className="mb-2 flex justify-between text-xs lg:text-sm text-gray-500"><span>Remaining amount:</span><span>{receipt.currency} {remainingTotals.total.toFixed(2)}</span></div>
+					<div className="mt-1 flex justify-between border-t pt-3 text-sm lg:text-lg font-bold"><span>Selected total:</span><span className="text-blue-600">{receipt.currency} {selectedTotals.total.toFixed(2)}</span></div>
 				</div>
 
 					{storageError && <p className="mb-4 px-4 text-sm text-red-600">{storageError}</p>}
@@ -295,7 +295,7 @@ export default function SplitBill({ receiptId }: { receiptId?: string }) {
 									<p className="font-medium">Split {index + 1}</p>
 									<p className="font-bold">{receipt.currency} {split.total.toFixed(2)}</p>
 								</div>
-								<p className="mt-1 text-xs text-slate-500">{split.items.map((item) => `${item.name} x${item.quantity}`).join(", ")}</p>
+								<pre className="mt-1 text-xs text-slate-500">{split.items.map((item) => `${item.name} x${item.quantity}`).join('\n')}</pre>
 								<button type="button" onClick={() => modifySplit(split.id)} className="mt-3 rounded-lg bg-blue-600 px-3 py-2 text-sm font-medium text-white hover:bg-blue-700">
 									Cancel this split
 								</button>
