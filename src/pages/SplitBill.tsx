@@ -295,7 +295,7 @@ export default function SplitBill({ receiptId }: { receiptId?: string }) {
 									<p className="font-medium">Split {index + 1}</p>
 									<p className="font-bold">{receipt.currency} {split.total.toFixed(2)}</p>
 								</div>
-								<pre className="mt-1 text-xs text-slate-500">{split.items.map((item) => `${item.name} x${item.quantity}`).join('\n')}</pre>
+								<pre className="mt-1 text-xs text-slate-500">{split.items.map((item) => `${(item.name.length > 20) ? `${item.name.substring(0, 20)}...` : item.name} x${item.quantity}`).join('\n')}</pre>
 								<button type="button" onClick={() => modifySplit(split.id)} className="mt-3 rounded-lg bg-blue-600 px-3 py-2 text-sm font-medium text-white hover:bg-blue-700">
 									Cancel this split
 								</button>
