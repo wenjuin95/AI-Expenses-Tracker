@@ -1,15 +1,8 @@
-import React, { useState } from "react";
-// Remove or keep useNavigate depending on if you use React Router
-// import { useNavigate } from "react-router-dom";
-import type { Receipt } from "../types/expenses";
+import { useState } from "react";
+
 import ReviewReceipt from "../components/ReviewReceipt";
 
-interface BatchReviewPageProps {
-	results: Receipt[];
-	setResults: React.Dispatch<React.SetStateAction<Receipt[] | null>>;
-	setFiles: React.Dispatch<React.SetStateAction<File[]>>;
-	onReviewComplete: () => void;
-}
+import type { BatchReviewPageProps } from "../types/expenses";
 
 export default function BatchReviewPage({
 	results,
@@ -17,7 +10,6 @@ export default function BatchReviewPage({
 	setFiles,
 	onReviewComplete,
 }: BatchReviewPageProps) {
-	// const navigate = useNavigate();
 	const [processedCount, setProcessedCount] = useState(0);
 
 	const handleReceiptComplete = () => {

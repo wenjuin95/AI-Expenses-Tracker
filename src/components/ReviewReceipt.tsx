@@ -1,17 +1,16 @@
 import { useState } from "react";
-import { saveExpense } from "../api/expenseApi";
-import PreventRefresh from "./PreventRefresh";
-import Popup from "./Popup";
-import type { Receipt, ReceiptItem } from "../types/expenses";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronDown } from "@fortawesome/free-solid-svg-icons";
 
-interface ReviewReceiptProps {
-	result: Receipt;
-	index: number;
-	total: number;
-	onComplete: () => void;
-}
+import { saveExpense } from "../api/expenseApi";
+import PreventRefresh from "./PreventRefresh";
+import Popup from "./Popup";
+
+import type {
+	Receipt,
+	ReceiptItem,
+	ReviewReceiptProps
+} from "../types/expenses";
 
 export default function ReviewReceipt({
 	result,

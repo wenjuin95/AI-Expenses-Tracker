@@ -1,9 +1,11 @@
-import React, { useEffect, useState } from "react";
-import { saveExpense } from "../api/expenseApi";
-import type { Receipt, ReceiptItem } from "../types/expenses";
-import Popup from "../components/Popup";
+import { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronDown } from "@fortawesome/free-solid-svg-icons";
+
+import { saveExpense } from "../api/expenseApi";
+import Popup from "../components/Popup";
+
+import type { Receipt, ReceiptItem } from "../types/expenses";
 
 export default function ManualEntry() {
 	const [saving, setSaving] = useState(false);
@@ -60,7 +62,7 @@ export default function ManualEntry() {
 		}));
 	};
 
-	const handleSave = (e: React.FormEvent) => {
+	const handleSave = (e: any) => {
 		e.preventDefault(); // Prevent standard form submission
 
 		if (calculatedTotal <= 0) {
@@ -113,7 +115,6 @@ export default function ManualEntry() {
 
 		} catch (err) {
 			throw new Error(err instanceof Error ? err.message : "Failed to save expense.");
-			setSaving(false);
 		}
 	};
 

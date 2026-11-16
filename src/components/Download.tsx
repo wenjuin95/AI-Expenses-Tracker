@@ -2,11 +2,7 @@ import { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faDownload } from "@fortawesome/free-solid-svg-icons";
 
-// Extend the Event interface for the PWA prompt
-interface BeforeInstallPromptEvent extends Event {
-	prompt: () => Promise<void>;
-	userChoice: Promise<{ outcome: 'accepted' | 'dismissed'; platform: string }>;
-}
+import type { BeforeInstallPromptEvent } from "../types/expenses";
 
 export default function InstallPWAButton() {
 	const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null);

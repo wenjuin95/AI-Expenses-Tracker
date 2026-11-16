@@ -1,34 +1,24 @@
 import { useEffect, useMemo, useState } from "react";
 import { get, set } from "idb-keyval";
+
 import { getSavedExpenses } from "../api/expenseApi";
-import type { Receipt, ReceiptItem } from "../types/expenses";
 import ReceiptScanner from "./ReceiptScanner";
 
-type SplitStep = "choose" | "saved" | "scan" | "split";
-
-type SplitItem = ReceiptItem & {
-	lineId: string;
-};
-
-interface SplitRecord {
-	id: string;
-	items: SplitItem[];
-	subtotal: number;
-	taxAmount: number;
-	total: number;
-	createdAt: string;
-}
-
-interface SplitSession {
-	sourceId: string;
-	remainingItems: SplitItem[];
-	splits: SplitRecord[];
-}
-
-const SPLIT_SESSIONS_KEY = "split_bill_sessions";
+import { SPLIT_SESSIONS_KEY } from "../types/expenses";
+import type {
+	Receipt,
+	ReceiptItem,
+	SplitItem, SplitStep,
+	SplitRecord,
+	SplitSession
+} from "../types/expenses";
 
 const toSplitItems = (items: ReceiptItem[]): SplitItem[] =>
 	items.map((item, index) => ({ ...item, lineId: `line-${index}` }));
+
+export const clearSplitSessions = async () => {
+	await set(SPLIT_SESSIONS_KEY, []);
+};
 
 export default function SplitBill({ receiptId }: { receiptId?: string }) {
 	const [expenses, setExpenses] = useState<Receipt[]>([]);
@@ -222,6 +212,21 @@ export default function SplitBill({ receiptId }: { receiptId?: string }) {
 		}
 	};
 
+	const clearCurrentReceipt = async () => {
+		try {
+			await clearSplitSessions();
+			setReceipt(null);
+			setSourceId(null);
+			setRemainingItems([]);
+			setSplits([]);
+			setStep("choose");
+			setStorageError(null);
+		} catch (error) {
+			console.error("Failed to clear split sessions:", error);
+			setStorageError("The split history could not be cleared.");
+		}
+	};
+
 	if (loading || loadingSession) return <div className="p-4 text-center">Loading receipts...</div>;
 
 	if (step === "choose") {
@@ -289,15 +294,16 @@ export default function SplitBill({ receiptId }: { receiptId?: string }) {
 	return (
 		<div className="mx-auto max-w-md space-y-6 p-4">
 			<div className="rounded-xl border bg-white p-6 shadow-sm">
+
 				<div className="mb-3 flex items-center justify-between gap-3">
 					<h2 className="text-sm font-bold lg:text-xl">{receipt.merchant_name}</h2>
-					<button type="button" onClick={() => { setReceipt(null); setSourceId(null); setStep("choose"); }} className="rounded-lg bg-slate-200 px-3 py-2 text-sm font-medium text-slate-800 hover:bg-slate-300">
+					<button type="button" onClick={() => void clearCurrentReceipt()} className="rounded-lg bg-slate-200 px-3 py-2 text-sm font-medium text-slate-800 hover:bg-slate-300">
 						Change receipt
 					</button>
 				</div>
-				<p className="mb-6 text-sm text-gray-500">Tax applied: {(receipt.tax ?? 0) > 0 ? `${receipt.tax}%` : "None"}</p>
 
-				{storageError && <p className="mb-4 text-sm text-red-600">{storageError}</p>}
+				<p className="mb-6 text-sm text-green-400 font-bold">Tax applied: {(receipt.tax ?? 0) > 0 ? `${receipt.tax}%` : "None"}</p>
+
 
 				{remainingItems.length > 0 ? (
 					<div className="space-y-4">
@@ -329,13 +335,15 @@ export default function SplitBill({ receiptId }: { receiptId?: string }) {
 					<div className="mt-1 flex justify-between border-t pt-3 text-lg font-bold"><span>Selected total:</span><span className="text-blue-600">{receipt.currency} {selectedTotals.total.toFixed(2)}</span></div>
 				</div>
 
+					{storageError && <p className="mb-4 px-4 text-sm text-red-600">{storageError}</p>}
+
 				<button type="button" onClick={() => void makeSplit()} disabled={remainingItems.length === 0} className="w-full rounded-lg bg-blue-600 py-3 font-medium text-white hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-50">
 					{splits.length === 0 ? "Make split" : "Make another split"}
 				</button>
 			</div>
 
 			<div className="rounded-xl border bg-white p-6 shadow-sm">
-				<h3 className="mb-4 text-lg font-bold">All splits</h3>
+				<h3 className="mb-4 text-lg font-bold">Split List</h3>
 				{splits.length === 0 ? (
 					<p className="text-sm text-slate-500">No splits created yet.</p>
 				) : (

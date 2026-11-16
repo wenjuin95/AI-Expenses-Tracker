@@ -8,21 +8,7 @@ import {
 	faCircleInfo,
 } from "@fortawesome/free-solid-svg-icons";
 
-export type PopupType = "error" | "success" | "cancel" | "info";
-
-interface PopupProps {
-	open: boolean;
-	type: PopupType;
-	title: string;
-	message: string;
-	onOk?: () => void;
-	onCancel?: () => void;
-	okLabel?: string;
-	showOkButton?: boolean;
-	cancelLabel?: string;
-	showDontShowAgain?: boolean;
-	storageKey?: string;
-}
+import type { PopupProps, PopupType } from "../types/expenses";
 
 const popupStyles: Record<
 	PopupType,

@@ -1,9 +1,9 @@
 import { GoogleGenAI } from '@google/genai';
 import { get, set } from 'idb-keyval';
-import { receiptSchema, MAX_STORAGE, type Receipt } from '../types/expenses';
-import { getErrorMessage, getErrorStatus } from '../types/errors';
 
-const STORAGE_KEY = "expenses_data";
+import type { Receipt } from '../types/expenses';
+import { getErrorMessage, getErrorStatus } from '../types/errors';
+import { receiptSchema, MAX_STORAGE, STORAGE_KEY } from '../types/expenses';
 
 const fileToBase64 = (file: File): Promise<string> => {
   return new Promise((resolve, reject) => {

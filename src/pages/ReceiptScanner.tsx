@@ -1,19 +1,14 @@
 import { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash, faKey, faChevronRight } from "@fortawesome/free-solid-svg-icons";
-import type { Receipt } from "../types/expenses";
-import { getErrorMessage } from "../types/errors";
 
 import { parseReceipts } from "../api/expenseApi";
 import PreventRefresh from "../components/PreventRefresh";
 import Popup from "../components/Popup";
 import BatchReviewPage from "./BatchReviewPage";
 
-interface ReceiptScannerProps {
-	onReviewComplete: () => void;
-	onReceiptScanned?: (receipt: Receipt) => void;
-	children?: React.ReactNode;
-}
+import { getErrorMessage } from "../types/errors";
+import type { Receipt, ReceiptScannerProps } from "../types/expenses";
 
 export default function ReceiptScanner({ onReviewComplete, onReceiptScanned, children }: ReceiptScannerProps) {
 	const [apiKey, setApiKey] = useState("");

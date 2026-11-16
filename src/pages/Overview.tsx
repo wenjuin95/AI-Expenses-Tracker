@@ -1,18 +1,20 @@
 import { useState, useEffect } from "react";
-import { EXPENSE_CATEGORY_COLORS, UNCATEGORIZED_COLOR, MAX_STORAGE, type Receipt } from "../types/expenses";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash, faReceipt, faChevronDown, faDownload } from "@fortawesome/free-solid-svg-icons";
 import { get } from 'idb-keyval';
 
 import { getSavedExpenses, deleteExpense } from "../api/expenseApi";
-
 import ExpenseChart from "../components/Chart";
 import { exportCsv } from "../components/ExportFile";
 import Popup from "../components/Popup";
 
-interface ExpenseOverviewProps {
-	theme: "light" | "dark";
-}
+import {
+	EXPENSE_CATEGORY_COLORS,
+	UNCATEGORIZED_COLOR,
+	MAX_STORAGE,
+	type Receipt,
+	type ExpenseOverviewProps
+} from "../types/expenses";
 
 const formatStorageSize = (sizeInMB: number) => {
 	if (sizeInMB < 1) {

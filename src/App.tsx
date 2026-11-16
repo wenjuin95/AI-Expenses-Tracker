@@ -6,7 +6,7 @@ import './App.css'
 
 import ReceiptScanner from './pages/ReceiptScanner'
 import ManualEntry from "./pages/ManualEntry";
-import SplitBill from './pages/SplitBill';
+import SplitBill, { clearSplitSessions } from './pages/SplitBill';
 import ExpenseOverview from './pages/Overview'
 import Footer from './pages/Footer';
 
@@ -87,6 +87,16 @@ function App() {
 
 	const toggleTheme = () => {
 		setTheme((currentTheme) => currentTheme === "light" ? "dark" : "light");
+	};
+
+	const handleBackToMenu = async () => {
+		try {
+			await clearSplitSessions();
+			setActiveView('menu');
+		} catch (error) {
+			console.error("Failed to clear split sessions:", error);
+			setActiveView('menu');
+		}
 	};
 
 	if (!isOnline) {
@@ -171,7 +181,7 @@ return (
 					{activeView !== 'menu' && (
 						<div className="flex justify-end w-full">
 							<button
-								onClick={() => setActiveView('menu')}
+								onClick={() => void handleBackToMenu()}
 								className="text-sm font-medium text-white flex items-center gap-2 bg-blue-500 border border-slate-300 hover:bg-blue-700 px-4 py-2 rounded-lg transition-colors"
 							>
 								<FontAwesomeIcon icon={faArrowLeft} />

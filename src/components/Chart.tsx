@@ -7,15 +7,12 @@ import {
 } from 'chart.js';
 import type { ChartData } from 'chart.js';
 import { Doughnut } from 'react-chartjs-2';
-import { EXPENSE_CATEGORY_COLORS, UNCATEGORIZED_COLOR, type Receipt } from '../types/expenses';
+
+import type { ExpenseChartProps } from '../types/expenses';
+import { EXPENSE_CATEGORY_COLORS, UNCATEGORIZED_COLOR} from '../types/expenses';
 
 // Register the required Chart.js elements
 ChartJS.register(ArcElement, Tooltip, Legend);
-
-interface ExpenseChartProps {
-    expenses: Receipt[];
-    theme: "light" | "dark";
-}
 
 function resolveColor(color: string) {
     if (!color.startsWith('var(')) return color;

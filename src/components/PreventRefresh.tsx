@@ -1,8 +1,6 @@
 import { useEffect } from "react";
 
-interface PreventRefreshProps {
-	enabled: boolean;
-}
+import type { PreventRefreshProps } from "../types/expenses";
 
 export default function PreventRefresh({ enabled }: PreventRefreshProps) {
 	useEffect(() => {

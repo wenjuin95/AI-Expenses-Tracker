@@ -2,10 +2,7 @@ import { useState } from "react";
 import { faCircleCheck, faCircleExclamation, faPaperPlane, faXmark } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-interface FeedbackProps {
-	isOpen: boolean;
-	onClose: () => void;
-}
+import type { FeedbackProps } from "../types/expenses";
 
 export default function Feedback({ isOpen, onClose }: FeedbackProps) {
 	const [formData, setFormData] = useState({
