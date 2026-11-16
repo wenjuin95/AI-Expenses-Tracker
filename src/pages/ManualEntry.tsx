@@ -367,7 +367,7 @@ export default function ManualEntry() {
 												<button
 													type="button"
 													onClick={() => removeItem(idx)}
-													className="w-full py-1.5 text-xs text-red-600 border border-red-200 bg-white rounded-lg hover:bg-red-50 transition-colors"
+													className="w-full py-1.5 text-xs text-red-500 border border-red-200 bg-red-50 rounded-lg hover:bg-red-400 hover:text-red-800 transition-colors"
 												>
 													Remove Line Item
 												</button>

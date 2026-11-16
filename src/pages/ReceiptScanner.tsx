@@ -229,12 +229,12 @@ return (
 					<div className="flex items-center gap-2">
 						<p className="text-xs text-slate-700">API Key:</p>
 						<span className="font-mono text-xs text-slate-500 px-2 py-1 rounded-md border border-gray-200 bg-slate-50">
-							{`${apiKey.slice(0, 4)}...`}
+							{`${apiKey.slice(0, 4)}***`}
 						</span>
 					</div>
 					<button
 						onClick={handleRemoveApiKey}
-						className="text-xs text-red-500 hover:text-red-700 bg-red-50 hover:bg-red-100 px-3 py-2 rounded-md flex items-center justify-center sm:justify-start gap-2 transition-colors border border-red-200 w-full sm:w-auto"
+						className="text-xs text-red-500 bg-red-50 hover:bg-red-400 hover:text-red-800 px-3 py-2 rounded-md flex items-center justify-center sm:justify-start gap-2 transition-colors border border-red-200 w-full sm:w-auto"
 						title="Delete saved API key"
 					>
 						<FontAwesomeIcon icon={faTrash} className="w-3 h-3" /> Remove API Key
