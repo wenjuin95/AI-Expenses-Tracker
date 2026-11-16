@@ -32,6 +32,7 @@ https://github.com/user-attachments/assets/ec42a440-2bb9-42d7-bec9-dfcec17a75ed
 * **Local Privacy:** All financial records are stored securely in the browser's IndexedDB.
 * **CSV Export:** Download your recorded expenses into a universal CSV format, making it easy to open and manage in Excel, Google Sheets, or Numbers.
 * **Progressive Web App:** Install Expense Tracker on supported mobile and desktop browsers without downloading it from an app store. No service worker is required or included.
+* **Split Bill:** Select a saved receipt or scan a new one, then divide its items into multiple splits by choosing quantities for each person. The app calculates each split's subtotal, applies the receipt's tax rate, shows the remaining amount, and saves split progress locally so it can be continued or corrected later.
 
 ---
 
@@ -133,9 +134,7 @@ Expense Tracker includes a web app manifest and can be installed from a supporte
 ---
 
 ## Future Improvements
-- [ ] Convert the application into a Progressive Web App (PWA) for native mobile installation and offline caching.
 - [ ] Allow conversational inputs (e.g., typing "spent 15 on milk tea today") that the LLM will automatically categorize and format into a draft record.
-- [ ] AI assistant to help you split bill with tax calculation
 
 ---
 
